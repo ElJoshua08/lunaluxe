@@ -1,7 +1,6 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
-import { Montserrat } from 'next/font/google';
-import localFont from 'next/font/local';
+import { Italiana, Montserrat } from 'next/font/google';
 import './globals.css';
 
 const montserrat = Montserrat({
@@ -11,12 +10,12 @@ const montserrat = Montserrat({
   variable: '--font-montserrat',
 });
 
-const kugile = localFont({
-  
-  src: './fonts/Kugile.ttf',
-  variable: '--font-kugile',
+const italiana = Italiana({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-italiana',
 });
-
 export const metadata: Metadata = {
   title: 'Lunaluxe',
   description: 'Buy top quality jewelry handcrafted by artisans.',
@@ -30,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.className} ${kugile.variable} antialiased`}
+        className={`${montserrat.className} ${italiana.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"

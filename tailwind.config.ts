@@ -57,7 +57,7 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        kugile: 'var(--font-kugile)',
+        italiana: 'var(--font-italiana)',
         montserrat: 'var(--font-montserrat)',
       },
     },

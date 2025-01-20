@@ -1,22 +1,57 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Logo } from './icons/logo';
+
 export const Navbar = () => {
+  const pathname = usePathname();
+
+  const links = [
+    {
+      name: 'Home',
+      href: '/',
+    },
+    {
+      name: 'Our Collection',
+      href: '/our-collection',
+    },
+    {
+      name: 'Contact Us',
+      href: '/contact-us',
+    },
+  ];
+
   return (
-    <div className="flex flex-col items-center justify-center gap-4 py-6 px-8 sm:px-12 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-      <div className="flex items-center gap-4">
-        <img
-          src="/logo.png"
-          alt="Lunaluxe Logo"
-          className="h-8 w-8"
-        />
-        <h1 className="text-2xl font-bold">Lunaluxe</h1>
+    <nav className="flex flex-row items-center justify-between px-8 py-4">
+      {/* Logo and Name */}
+      <div className="flex items-center">
+        <Link href="/">
+          <Logo size="48px" />
+        </Link>
+        <h1 className="text-4xl font-bold font-italiana ml-2">Lunaluxe</h1>
       </div>
-      <div className="flex items-center gap-4">
-        <a href="#" className="text-sm font-medium text-primary">
-          Sign in
-        </a>
-        <a href="#" className="text-sm font-medium text-primary">
-          Sign up
-        </a>
-      </div>
-    </div>
+
+      {/* Menu */}
+      <ul className="flex flex-row gap-x-6 items-center">
+        {links.map((link) => {
+          const isActive = pathname === link.href;
+
+          return (
+            <li
+              key={link.name}
+              className="relative text-lg"
+            >
+              <Link href={link.href}>{link.name}</Link>
+              <span
+                className={`absolute bottom-0 left-0 w-full h-0.5 rounded-full bg-foreground transition-all duration-100 ${
+                  isActive ? 'w-full' : 'w-0'
+                }`}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 };
