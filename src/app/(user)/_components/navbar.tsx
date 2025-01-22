@@ -23,7 +23,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="flex flex-row items-center justify-between px-8 py-4">
+    <nav className="flex flex-row items-center justify-between px-8 py-4 w-full backdrop-blur-xl bg-transparent">
       {/* Logo and Name */}
       <div className="flex items-center">
         <Link href="/">

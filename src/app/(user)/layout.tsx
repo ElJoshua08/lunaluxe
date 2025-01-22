@@ -6,9 +6,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <main className="flex flex-col h-dvh items-center justify-start w-full">
       <Navbar />
       {children}
-    </>
+    </main>
   );
 }
