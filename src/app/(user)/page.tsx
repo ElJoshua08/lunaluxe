@@ -41,7 +41,7 @@ export default function Home() {
             height={820}
             quality={100}
             draggable={false}
-            className="select-none absolute right-0 top-[155px] -translate-y-1/2 translate-x-1/2 -z-10 motion-opacity-in-0 motion-translate-y-in-25 motion-blur-in-md motion-delay-1500 motion-ease-out"
+            className="select-none absolute right-0 top-[155px] -translate-y-1/2 translate-x-1/2 -z-10 motion-preset-blur-up-lg"
           />
         </div>
 
