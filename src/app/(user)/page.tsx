@@ -6,9 +6,9 @@ export default function Home() {
   return (
     <div className="flex items-center justify-center flex-col overflow-x-clip h-full ">
       {/* Hero Section */}
-      <div className="flex flex-row items-center justify-center gap-x-8 px-32 mt-20 relative ">
+      <div className="flex flex-row items-center justify-center gap-x-8 px-32 py-8 mt-20 relative bg-primary -z-[5]">
         <h1 className="font-italiana font-semibold text-8xl text-balance">
-          Exquisite, <span className="text-primary">artisan-crafted</span>{' '}
+          Exquisite, <span className="text-secondary">artisan-crafted</span>{' '}
           jewelry of unparalleled quality.
         </h1>
 
