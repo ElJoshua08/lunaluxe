@@ -6,9 +6,9 @@ export default function Home() {
   return (
     <div className="flex items-center justify-center flex-col overflow-x-clip h-full ">
       {/* Hero Section */}
-      <div className="flex flex-row items-center justify-center gap-x-8 px-32 py-8 mt-20 relative bg-primary -z-[5]">
+      <div className="flex flex-row items-center justify-center gap-x-8 px-32 py-8 mt-20 relative bg-secondary -z-[5]">
         <h1 className="font-italiana font-semibold text-8xl text-balance">
-          Exquisite, <span className="text-secondary">artisan-crafted</span>{' '}
+          Exquisite, <span className="text-primary">artisan-crafted</span>{' '}
           jewelry of unparalleled quality.
         </h1>
 
@@ -36,6 +36,10 @@ export default function Home() {
           Jewelry isn’t just an accessory. it’s a wearable memory
         </h2>
       </div>
+
+      {/* Go down button */}
+      
+
 
       {/* About Us Section */}
 
