@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
-import { Italiana, Montserrat } from 'next/font/google';
+import { Italiana, Italianno, Montserrat } from 'next/font/google';
 import './globals.css';
 
 const montserrat = Montserrat({
@@ -16,6 +16,14 @@ const italiana = Italiana({
   display: 'swap',
   variable: '--font-italiana',
 });
+
+const italianno = Italianno({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-italianno',
+});
+
 export const metadata: Metadata = {
   title: 'Lunaluxe',
   description: 'Buy top quality jewelry handcrafted by artisans.',
@@ -29,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.className} ${italiana.variable} antialiased`}
+        className={`${montserrat.className} ${italiana.variable} ${italianno.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"

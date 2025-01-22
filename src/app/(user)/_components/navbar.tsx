@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Logo } from './icons/logo';
+import { Logo } from '../../../components/icons/logo';
 import { useTheme } from 'next-themes';
 
 export const Navbar = () => {

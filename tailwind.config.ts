@@ -59,9 +59,10 @@ export default {
       fontFamily: {
         italiana: 'var(--font-italiana)',
         montserrat: 'var(--font-montserrat)',
+        italianno: 'var(--font-italianno)',
       },
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-motion')],
 } satisfies Config;
