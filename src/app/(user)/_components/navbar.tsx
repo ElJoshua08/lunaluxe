@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from './icons/logo';
+import { useTheme } from 'next-themes';
 
 export const Navbar = () => {
+  const { theme } = useTheme();
   const pathname = usePathname();
 
   const links = [
@@ -23,11 +25,14 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="flex flex-row items-center justify-between px-8 py-4 w-full backdrop-blur-xl bg-transparent">
+    <nav className="flex flex-row items-center justify-between px-8 py-4 w-full backdrop-blur-xl bg-background/50 sticky top-0 z-10">
       {/* Logo and Name */}
       <div className="flex items-center">
         <Link href="/">
-          <Logo size="48px" />
+          <Logo
+            size="48px"
+            color={theme === 'dark' ? '#fff' : '#000'}
+          />
         </Link>
         <h1 className="text-4xl font-bold font-italiana ml-2">Lunaluxe</h1>
       </div>
