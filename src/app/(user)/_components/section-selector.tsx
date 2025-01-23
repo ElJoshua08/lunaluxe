@@ -65,7 +65,7 @@ export const SectionSelector = () => {
   }
 
   return (
-    <div className="fixed bottom-40 right-12 flex flex-col gap-y-4">
+    <div className="fixed bottom-40 right-12 flex flex-col gap-y-4 z-20">
       {sections.map((section) => {
         const isActive = currentSection === section;
 

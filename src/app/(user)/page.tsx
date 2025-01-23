@@ -1,6 +1,7 @@
 'use client';
 
 import heroRingImg from '@/../public/images/hero-ring.webp';
+import section2RingImg from '@/../public/images/ring-2.webp';
 import { buttonVariants } from '@/components/ui/button';
 import { TextAnimate } from '@/components/ui/text-animate';
 import { cn } from '@/lib/utils';
@@ -30,7 +31,9 @@ export default function Home() {
             className="font-italiana font-semibold text-8xl text-balance text-black"
           >
             Exquisite,{' '}
-            <span className="text-primary dark:text-secondary font-bold">artisan-crafted</span>{' '}
+            <span className="text-primary dark:text-secondary font-bold">
+              artisan-crafted
+            </span>{' '}
             jewelry of unparalleled quality.
           </TextAnimate>
 
@@ -85,9 +88,20 @@ export default function Home() {
 
       {/* Section 2 */}
       <section
-        className="shrink-0 grow w-full h-full py-8"
+        className="shrink-0 grow w-full h-full py-8 relative"
         id="about-us"
       >
+        {/* Section Ring */}
+        <Image
+          src={section2RingImg}
+          alt="Section Ring"
+          width={1050}
+          height={1050}
+          quality={100}
+          draggable={false}
+          className="select-none absolute left-0 top-[10px] -translate-x-[50%] -z-10 motion-preset-blur-up-lg"
+        />
+
         {/* About Us Section and customers count */}
         <div className="flex flex-row items-center justify-around py-8 px-40 w-full ">
           <div className="flex flex-col items-center justify-center w-full h-auto ">
@@ -96,11 +110,9 @@ export default function Home() {
             </h2>
 
             <p className="max-w-[50ch] text-balance text-2xl leading-normal text-center mt-6">
-              At Luna, we believe jewelry is more than adornment—it’s an
-              expression of your unique story. With a commitment to exceptional
-              craftsmanship, sustainable materials, and timeless designs, every
-              piece we create is made to celebrate the beauty and moments that
-              define you.
+              At Luna, jewelry isn’t just adornment—it’s your story. Crafted
+              with care, using sustainable materials and timeless designs, each
+              piece celebrates the moments that define you.
             </p>
           </div>
 
