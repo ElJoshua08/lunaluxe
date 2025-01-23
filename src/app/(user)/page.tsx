@@ -2,12 +2,10 @@
 
 import heroRingImg from '@/../public/images/hero-ring.webp';
 import section2RingImg from '@/../public/images/ring-2.webp';
-import { buttonVariants } from '@/components/ui/button';
 import { TextAnimate } from '@/components/ui/text-animate';
-import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { CTA } from './_components/cta';
 import { SectionSelector } from './_components/section-selector';
 import { TotalCustomers } from './_components/total-customers';
 
@@ -50,15 +48,7 @@ export default function Home() {
 
         {/* CTA and Info */}
         <div className="flex flex-row items-center justify-center px-40 w-full mt-32 py-8">
-          <Link
-            href="/our-collection"
-            className={cn(
-              buttonVariants({ variant: 'accent' }),
-              'h-auto text-xl py-3 hover:shadow-lg hover:shadow-accent/70 transition-all'
-            )}
-          >
-            Explore our collection
-          </Link>
+          <CTA />
 
           <TextAnimate
             by="word"
