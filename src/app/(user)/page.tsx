@@ -26,6 +26,7 @@ export default function Home() {
             by="word"
             animation="blurInDown"
             duration={10000}
+            hoverAnimate
             className="font-italiana font-semibold text-8xl text-balance text-black"
           >
             Exquisite,{' '}

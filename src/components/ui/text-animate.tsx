@@ -3,7 +3,7 @@
 
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion, MotionProps, Variants } from 'motion/react';
-import { ElementType, ReactNode } from 'react';
+import { ElementType, ReactNode, useState } from 'react';
 
 type AnimationType = 'text' | 'word' | 'character' | 'line';
 type AnimationVariant =
@@ -30,6 +30,7 @@ interface TextAnimateProps extends MotionProps {
   startOnView?: boolean;
   once?: boolean;
   animation?: AnimationVariant;
+  hoverAnimate?: boolean; // New prop for hover-based focus animation
 }
 
 const staggerTimings: Record<AnimationType, number> = {
@@ -262,7 +263,6 @@ const defaultItemAnimationVariants: Record<
       },
     },
   },
-  // Add other variants as needed...
 };
 
 export function TextAnimate({
@@ -277,9 +277,11 @@ export function TextAnimate({
   once = false,
   by = 'word',
   animation = 'blurInDown',
+  hoverAnimate = false, // Default is false
   ...props
 }: TextAnimateProps) {
   const MotionComponent = motion.create(Component);
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null); // Track the hovered segment
 
   // Use provided variants or defaults
   const finalVariants = animation
@@ -325,30 +327,40 @@ export function TextAnimate({
 
   const segments = parseSegments(children);
 
+  console.log(hoverIndex);
+
   return (
     <AnimatePresence mode="popLayout">
       <MotionComponent
         variants={finalVariants.container}
         initial="hidden"
-        whileInView={startOnView ? 'show' : undefined}
-        animate={startOnView ? undefined : 'show'}
+        animate={startOnView ? 'show' : undefined}
         exit="exit"
         className={cn('whitespace-pre-wrap', className)}
         {...props}
       >
-        {segments.map((segment, i) => (
-          <motion.span
-            key={`segment-${i}`}
-            variants={finalVariants.item}
-            custom={[i, duration / segments.length]}
-            className={cn(
-              by === 'line' ? 'block' : 'inline-block whitespace-pre',
-              segmentClassName
-            )}
-          >
-            {segment}
-          </motion.span>
-        ))}
+        {segments.map((segment, i) => {
+          return (
+            <motion.span
+              key={`segment-${i}`}
+              variants={finalVariants.item}
+              custom={[i, duration / segments.length]}
+              className={cn(
+                by === 'line' ? 'block' : 'inline-block whitespace-pre',
+                segmentClassName,
+                hoverAnimate && hoverIndex !== null && hoverIndex !== i
+                  ? 'opacity-50 blur-sm' // Blur and dim non-hovered segments
+                  : hoverAnimate && hoverIndex === i
+                  ? 'scale-110' // Focus effect on hovered segment
+                  : ''
+              )}
+              onMouseEnter={() => hoverAnimate && setHoverIndex(i)}
+              onMouseLeave={() => hoverAnimate && setHoverIndex(null)}
+            >
+              {segment}
+            </motion.span>
+          );
+        })}
       </MotionComponent>
     </AnimatePresence>
   );
