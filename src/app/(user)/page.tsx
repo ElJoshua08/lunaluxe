@@ -22,15 +22,15 @@ export default function Home() {
         className="shrink-0 grow w-full h-full "
       >
         {/* Hero Section */}
-        <div className="flex flex-row items-center justify-center gap-x-8 px-32 py-8 mt-20 relative bg-secondary -z-[5]">
+        <div className="flex flex-row items-center justify-center gap-x-8 px-32 py-8 mt-20 relative bg-secondary dark:bg-primary -z-[5]">
           <TextAnimate
             by="word"
             animation="blurInDown"
             duration={10000}
-            className="font-italiana font-semibold text-8xl text-balance"
+            className="font-italiana font-semibold text-8xl text-balance text-black"
           >
             Exquisite,{' '}
-            <span className="text-primary font-bold">artisan-crafted</span>{' '}
+            <span className="text-primary dark:text-secondary font-bold">artisan-crafted</span>{' '}
             jewelry of unparalleled quality.
           </TextAnimate>
 
@@ -50,7 +50,7 @@ export default function Home() {
           <Link
             href="/our-collection"
             className={cn(
-              buttonVariants({ variant: 'secondary' }),
+              buttonVariants({ variant: 'accent' }),
               'h-auto text-xl py-3 hover:shadow-lg hover:shadow-accent/70 transition-all'
             )}
           >

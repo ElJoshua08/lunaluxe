@@ -3,10 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from '../../../components/icons/logo';
-import { useTheme } from 'next-themes';
 
 export const Navbar = () => {
-  const { theme } = useTheme();
   const pathname = usePathname();
 
   const links = [
@@ -31,7 +29,7 @@ export const Navbar = () => {
         <Link href="/">
           <Logo
             size="48px"
-            color={theme === 'dark' ? '#fff' : '#000'}
+            className='text-foreground fill-foreground'
           />
         </Link>
         <h1 className="text-4xl font-bold font-italiana ml-2">Lunaluxe</h1>
