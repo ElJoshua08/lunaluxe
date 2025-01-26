@@ -1,4 +1,3 @@
-// Path: animations.ts
 import { Variants } from 'framer-motion';
 
 export type AnimationVariant =

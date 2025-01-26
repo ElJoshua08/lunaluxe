@@ -23,8 +23,8 @@ export default function Home() {
         <div className="flex flex-row items-center justify-center gap-x-8 px-32 py-8 mt-20 relative bg-secondary dark:bg-primary -z-[5]">
           <TextAnimate
             by="word"
-            animation="blurInDown"
-            duration={2000}
+            animation="blurInUp"
+            duration={2500}
             as="h1"
             className="font-italiana font-semibold text-8xl text-balance text-black"
           >
@@ -34,7 +34,6 @@ export default function Home() {
             </span>{' '}
             jewelry of unparalleled quality.
           </TextAnimate>
-
           <Image
             src={heroRingImg}
             alt="Hero Ring"
@@ -61,8 +60,7 @@ export default function Home() {
           </TextAnimate>
         </div>
 
-        {/* Go down button */}
-
+        {/* Next section icon */}
         <ChevronDown
           size={32}
           strokeWidth={2}
@@ -95,7 +93,9 @@ export default function Home() {
         <div className="flex flex-col justify-around py-28 px-40 gap-y-16 w-full">
           <TextAnimate
             by="word"
+            animation="blurInUp"
             as="h1"
+            delay={2500}
             startOnView
             className="text-9xl font-italiana font-semibold text-left self-start ml-24"
           >
