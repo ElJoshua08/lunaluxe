@@ -7,7 +7,6 @@ import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import { CTA } from './_components/cta';
 import { SectionSelector } from './_components/section-selector';
-import { TotalCustomers } from './_components/total-customers';
 
 export default function Home() {
   return (
@@ -25,8 +24,8 @@ export default function Home() {
           <TextAnimate
             by="word"
             animation="blurInDown"
-            duration={10000}
-            hoverAnimate
+            duration={2000}
+            as="h1"
             className="font-italiana font-semibold text-8xl text-balance text-black"
           >
             Exquisite,{' '}
@@ -54,7 +53,6 @@ export default function Home() {
           <TextAnimate
             by="word"
             animation="blurInUp"
-            delay={1000}
             duration={2500}
             as="h1"
             className="font-italiana text-right sm:text-7xl xl:text-8xl font-semibold text-balance leading-tight"
@@ -93,24 +91,32 @@ export default function Home() {
           className="select-none absolute left-0 top-[10px] -translate-x-[50%] -z-10 motion-preset-blur-up-lg"
         />
 
-        {/* About Us Section and customers count */}
-        <div className="flex flex-row items-center justify-around py-8 px-40 w-full ">
-          <div className="flex flex-col items-center justify-center w-full h-auto ">
-            <h2 className="text-7xl font-italiana font-semibold">
-              Our Story, Your Sparkle
+        {/* Tell about personalitation */}
+        <div className="flex flex-col justify-around py-28 px-40 gap-y-16 w-full">
+          <TextAnimate
+            by="word"
+            as="h1"
+            startOnView
+            className="text-9xl font-italiana font-semibold text-left self-start ml-24"
+          >
+            Make It{' '}
+            <span className="font-bold text-secondary bg-primary py-4 px-10">
+              Truly
+            </span>{' '}
+            Yours
+          </TextAnimate>
+
+          <p className="max-w-[50ch] text-balance text-5xl leading-tight mt-28 text-right">
+            Explore a wide selection of unique jewelry and make it your own with
+            easy-to-use customization tools.
+          </p>
+
+          <div className="w-full h-40 bg-secondary -z-20 flex items-center justify-center">
+            <h2 className="text-2xl text-black">
+              Here we put some rings in a row that rotates{' '}
             </h2>
-
-            <p className="max-w-[50ch] text-balance text-2xl leading-normal text-center mt-6">
-              At Luna, jewelry isn’t just adornment—it’s your story. Crafted
-              with care, using sustainable materials and timeless designs, each
-              piece celebrates the moments that define you.
-            </p>
           </div>
-
-          <TotalCustomers totalCustomers={1500} />
         </div>
-
-        {/* Satisfied Customers and Testimonials Section  */}
       </section>
     </div>
   );
