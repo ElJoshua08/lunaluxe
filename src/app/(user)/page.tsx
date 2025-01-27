@@ -94,9 +94,8 @@ export default function Home() {
           <TextAnimate
             by="word"
             animation="blurInUp"
+            duration={2500}
             as="h1"
-            delay={2500}
-            startOnView
             className="text-9xl font-italiana font-semibold text-left self-start ml-24"
           >
             Make It{' '}
