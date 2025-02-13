@@ -1,8 +1,9 @@
-import { Slot } from '@radix-ui/react-slot';
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+import { LoaderCircle } from 'lucide-react';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
@@ -38,18 +39,41 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+  loading?: boolean;
+  loadOnClick?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button';
+  (
+    {
+      children,
+      className,
+      variant,
+      size,
+      disabled,
+      onClick,
+      loadOnClick,
+      ...props
+    },
+    ref
+  ) => {
+    const [loading, setLoading] = React.useState<boolean>(false);
+
     return (
-      <Comp
+      <button
         className={cn(buttonVariants({ variant, size, className }))}
+        disabled={loading || disabled}
         ref={ref}
+        onClick={async (e) => {
+          loadOnClick && setLoading(true);
+          onClick && await onClick(e);
+          setLoading(false)
+        }}
         {...props}
-      />
+      >
+        {children}
+        {loading && <LoaderCircle className="animate-spin" />}
+      </button>
     );
   }
 );

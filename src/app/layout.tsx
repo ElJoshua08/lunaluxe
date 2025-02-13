@@ -1,8 +1,8 @@
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 import type { Metadata } from 'next';
 import { Italiana, Italianno, Montserrat } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/sonner';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -36,7 +36,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+    >
       <body
         className={`${montserrat.className} ${italiana.variable} ${italianno.variable} antialiased`}
       >
@@ -46,7 +49,13 @@ export default function RootLayout({
           enableSystem
           enableColorScheme
         >
-          <Toaster />
+          <Toaster
+            swipeDirections={['right']}
+            toastOptions={{
+              closeButton: true,
+            }}
+            richColors
+          />
           {children}
         </ThemeProvider>
       </body>

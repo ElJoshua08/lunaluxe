@@ -9,7 +9,7 @@ export const SectionSelector = () => {
     const updateSections = () => {
       const sectionIds = Array.from(document.querySelectorAll('section')).map(
         (sec) => sec.id
-      );
+      ).filter((_, i) => i > 0);
       setSections(sectionIds);
       setCurrentSection(sectionIds[0]);
     };

@@ -96,7 +96,7 @@ export default function Home() {
             animation="blurInUp"
             duration={2500}
             as="h1"
-            className="text-9xl font-italiana font-semibold text-left self-start ml-24"
+            className="text-9xl font-italiana font-semibold text-left self-start ml-24 text-balance leading-snug"
           >
             Make It{' '}
             <span className="font-bold text-secondary bg-primary py-4 px-10">
