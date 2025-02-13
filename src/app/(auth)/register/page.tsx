@@ -22,11 +22,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { ContinueButton } from '../components/continue-button';
+import { GoogleIcon } from '@/components/icons/google';
 
 const loginSchema = z.object({
   email: z
@@ -41,25 +43,45 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-row items-stretch justify-center h-full w-full">
-      <section className="bg-background grow h-full w-full flex items-center justify-center flex-col">
-        <LoginForm onSuccess={() => toast.success('Login Successful')} />
-        <div>
-          <div>
-            <Separator />
-            <p>OR</p>
-            <Separator />
+      <section className="bg-primary w-1/2 flex items-center justify-center px-6">
+        <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
+          Because excellence is never accidental.
+        </h1>
+      </section>
+      <section className="bg-background w-1/2 flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center h-full">
+          <LoginForm onSuccess={() => toast.success('Login Successful')} />
+          <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
+            <Separator className="grow shrink !bg-foreground/40" />
+            <p className="text-foreground/70 text-lg">OR</p>
+            <Separator className="grow shrink !bg-foreground/40" />
+          </div>
+          <div className="mt-4 w-full">
+            <ContinueButton
+              icon={
+                <GoogleIcon
+                  size={120}
+                  className="shrink-0 size-[24px]"
+                />
+              }
+              label="Continue with Google"
+            />
           </div>
         </div>
-      </section>
-      <section className="bg-primary grow w-full flex items-center justify-center">
-        <h1 className="font-italianno text-9xl">&quot;Luxurious&quot;</h1>
       </section>
 
       {/* This button is to change between login and register */}
 
-      <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-14 bg-foreground flex items-center justify-center p-2 hover:scale-110 transition-all group">
-        <ChevronRight className="text-background size-10 p-0 " />
-      </button>
+      <Link
+        href="/login"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-12 p-[0.8rem]  bg-white 
+       hover:scale-110 transition-all group shadow-md shadow-black/50 flex items-center justify-center"
+      >
+        <ChevronLeft
+          className="text-black size-32"
+          size={48}
+        />
+      </Link>
     </div>
   );
 }

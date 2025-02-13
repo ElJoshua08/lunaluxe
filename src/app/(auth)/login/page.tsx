@@ -25,10 +25,10 @@ import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { ContinueButton } from '../components/continue-button';
 
 const loginSchema = z.object({
   email: z
@@ -43,34 +43,45 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-row items-stretch justify-center h-full w-full">
-      <section className="bg-background grow h-full w-full flex items-center justify-center">
+      <section className="bg-background w-1/2 flex items-center justify-center">
         <div className="flex flex-col items-center justify-center h-full">
           <LoginForm onSuccess={() => toast.success('Login Successful')} />
           <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
-            <Separator className="grow shrink !bg-foreground/75" />
-            <p className="text-foreground text-lg">OR</p>
-            <Separator className="grow shrink !bg-foreground/75" />
+            <Separator className="grow shrink !bg-foreground/40" />
+            <p className="text-foreground/70 text-lg">OR</p>
+            <Separator className="grow shrink !bg-foreground/40" />
           </div>
           <div className="mt-4 w-full">
             <ContinueButton
-              icon={<GoogleIcon size={120} className='shrink-0 size-[24px]' />}
+              icon={
+                <GoogleIcon
+                  size={120}
+                  className="shrink-0 size-[24px]"
+                />
+              }
               label="Continue with Google"
             />
           </div>
         </div>
       </section>
-      <section className="bg-primary grow w-full flex items-center justify-center">
-        <h1 className="font-italianno text-9xl">&quot;Luxurious&quot;</h1>
+      <section className="bg-primary w-1/2 flex items-center justify-center px-6">
+        <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
+          Elegance is the only beauty that never fades.
+        </h1>
       </section>
 
       {/* This button is to change between login and register */}
 
-      <Button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-10 bg-white p-0 gap-0 hover:scale-110 transition-all group shadow-md shadow-black/50">
+      <Link
+        href="/register"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-12 p-[0.8rem]  bg-white 
+       hover:scale-110 transition-all group shadow-md shadow-black/50 flex items-center justify-center"
+      >
         <ChevronRight
-          className="text-black size-16 "
+          className="text-black size-32"
           size={48}
         />
-      </Button>
+      </Link>
     </div>
   );
 }
@@ -146,25 +157,5 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
         </Button>
       </CardFooter>
     </Card>
-  );
-};
-
-interface ContinueButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  icon: ReactNode;
-  label: string;
-}
-
-const ContinueButton = ({ icon, label, ...props }: ContinueButtonProps) => {
-  return (
-    <Button
-      {...props}
-      className="flex items-center justify-start gap-4 h-auto py-2 px-4 w-full text-lg text-foreground/85"
-      variant="outline"
-      size="lg"
-    >
-      {icon}
-      {label}
-    </Button>
   );
 };
