@@ -1,5 +1,6 @@
 'use client';
 
+import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from '../../../components/icons/logo';
@@ -29,14 +30,14 @@ export const Navbar = () => {
         <Link href="/">
           <Logo
             size="48px"
-            className='text-foreground fill-foreground'
+            className="text-foreground fill-foreground"
           />
         </Link>
         <h1 className="text-4xl font-bold font-italiana ml-2">Lunaluxe</h1>
       </div>
 
       {/* Menu */}
-      <ul className="flex flex-row gap-x-6 items-center">
+      <ul className="flex flex-row gap-x-8 items-center">
         {links.map((link) => {
           const isActive = pathname === link.href;
 
@@ -55,6 +56,17 @@ export const Navbar = () => {
           );
         })}
       </ul>
+
+      <Link
+        className={buttonVariants({
+          variant: 'default',
+          size: 'lg',
+          className: 'cursor-pointer text-base',
+        })}
+        href="/login"
+      >
+        Login
+      </Link>
     </nav>
   );
 };
