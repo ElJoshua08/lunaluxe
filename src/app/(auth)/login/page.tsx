@@ -87,6 +87,8 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
   async function onSubmit(data: z.infer<typeof loginSchema>) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
+    console.log(data);
+
     onSuccess();
   }
 
