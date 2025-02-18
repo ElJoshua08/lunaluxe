@@ -78,7 +78,7 @@ export default function LoginPage() {
        hover:scale-110 transition-all group shadow-md shadow-black/50 flex items-center justify-center"
       >
         <ChevronRight
-          className="text-black size-32"
+          className="text-black size-32 "
           size={48}
         />
       </Link>

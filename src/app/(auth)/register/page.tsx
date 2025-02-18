@@ -1,5 +1,6 @@
 'use client';
 
+import { GoogleIcon } from '@/components/icons/google';
 import { PasswordInput } from '@/components/password-input';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,13 +23,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { ContinueButton } from '../components/continue-button';
-import { GoogleIcon } from '@/components/icons/google';
 
 const loginSchema = z.object({
   email: z
@@ -38,7 +38,7 @@ const loginSchema = z.object({
   password: z.string().nonempty('This field is required'),
 });
 
-export default function LoginPage() {
+export default function RegisterPage() {
   // Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
 
   return (
@@ -50,7 +50,7 @@ export default function LoginPage() {
       </section>
       <section className="bg-background w-1/2 flex items-center justify-center">
         <div className="flex flex-col items-center justify-center h-full">
-          <LoginForm onSuccess={() => toast.success('Login Successful')} />
+          <RegisterForm onSuccess={() => toast.success('Login Successful')} />
           <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
             <Separator className="grow shrink !bg-foreground/40" />
             <p className="text-foreground/70 text-lg">OR</p>
@@ -77,8 +77,8 @@ export default function LoginPage() {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-12 p-[0.8rem]  bg-white 
        hover:scale-110 transition-all group shadow-md shadow-black/50 flex items-center justify-center"
       >
-        <ChevronLeft
-          className="text-black size-32"
+        <ChevronRight
+          className="text-black size-32 rotate-180 "
           size={48}
         />
       </Link>
@@ -86,7 +86,7 @@ export default function LoginPage() {
   );
 }
 
-const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
+const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -96,7 +96,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
   });
 
   async function onSubmit(data: z.infer<typeof loginSchema>) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log(data);
 
     onSuccess();
   }
@@ -105,7 +105,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
     <Card>
       <CardHeader>
         <CardTitle className="text-xl">Welcome to lunaluxe</CardTitle>
-        <CardDescription>Some pijo description</CardDescription>
+        <CardDescription>Please regiser before continuing.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-8 mb-6">
         <Form {...form}>
