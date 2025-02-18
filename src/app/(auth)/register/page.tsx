@@ -98,6 +98,8 @@ const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
   async function onSubmit(data: z.infer<typeof loginSchema>) {
     console.log(data);
 
+    console.log(data)
+      
     onSuccess();
   }
 
