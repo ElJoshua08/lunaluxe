@@ -20,23 +20,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { registerSchema } from '@/lib/schema/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { register } from '../actions';
 import { ContinueButton } from '../components/continue-button';
-
-const loginSchema = z.object({
-  email: z
-    .string()
-    .nonempty('This field is required')
-    .email('Must be a valid email'),
-  password: z.string().nonempty('This field is required'),
-});
 
 export default function RegisterPage() {
   // Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
@@ -50,7 +43,7 @@ export default function RegisterPage() {
       </section>
       <section className="bg-background w-1/2 flex items-center justify-center">
         <div className="flex flex-col items-center justify-center h-full">
-          <RegisterForm onSuccess={() => toast.success('Login Successful')} />
+          <RegisterForm />
           <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
             <Separator className="grow shrink !bg-foreground/40" />
             <p className="text-foreground/70 text-lg">OR</p>
@@ -86,31 +79,70 @@ export default function RegisterPage() {
   );
 }
 
-const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+const RegisterForm = () => {
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
   });
 
-  async function onSubmit(data: z.infer<typeof loginSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof registerSchema>) {
+    const error = await register(data);
 
-    console.log(data)
-      
-    onSuccess();
+    if (error) {
+      toast.error(error);
+      return;
+    }
   }
 
   return (
-    <Card>
+    <Card className="w-sm">
       <CardHeader>
         <CardTitle className="text-xl">Welcome to lunaluxe</CardTitle>
         <CardDescription>Please regiser before continuing.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-8 mb-6">
+      <CardContent className="space-y-4 mb-6">
         <Form {...form}>
+          <div className="flex flex-row gap-x-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First name</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Name"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last name</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Name"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <FormField
             control={form.control}
             name="email"
@@ -140,22 +172,31 @@ const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <PasswordInput
+                    {...field}
+                    placeholder="Confirm Password"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </Form>
       </CardContent>
-      <CardFooter className="flex items-end justify-between gap-x-16">
-        <Link href={'/forgot-password'}>
-          <Label
-            variant="link"
-            size="sm"
-          >
-            Forgot your password?
-          </Label>
-        </Link>
+      <CardFooter className="flex items-end justify-between">
         <Button
           onClick={form.handleSubmit(onSubmit)}
+          className="w-full"
           loadOnClick
         >
-          Login
+          Register
         </Button>
       </CardFooter>
     </Card>

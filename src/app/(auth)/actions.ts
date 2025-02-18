@@ -3,42 +3,40 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+import { loginSchema, registerSchema } from '@/lib/schema/auth';
 import { createClient } from '@/lib/utils/supabase/server';
+import { SignUpWithPasswordCredentials } from '@supabase/supabase-js';
+import { z } from 'zod';
 
-export async function login(formData: FormData) {
+export async function login(data: z.infer<typeof loginSchema>) {
   const supabase = await createClient();
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  };
 
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    redirect('/error');
+    return error.message;
   }
 
   revalidatePath('/', 'layout');
   redirect('/');
 }
 
-export async function register(formData: FormData) {
+export async function register(data: z.infer<typeof registerSchema>) {
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  };
-
-  const { error } = await supabase.auth.signUp(data);
+  const { error } = await supabase.auth.signUp({
+    email: data.email,
+    password: data.password,
+    options: {
+      emailRedirectTo: `${window.location.origin}/verify-email`,
+      data: {
+        display_name: `${data.firstName} ${data.lastName}`,
+      },
+    },
+  } as SignUpWithPasswordCredentials);
 
   if (error) {
-    redirect('/error');
+    return error.message;
   }
 
   revalidatePath('/', 'layout');

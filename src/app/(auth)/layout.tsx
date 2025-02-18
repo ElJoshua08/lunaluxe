@@ -1,3 +1,10 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Lunaluxe - Authentication',
+  description: 'Please verify your account before continuing.',
+};
+
 export default function AuthLayout({
   children,
 }: {

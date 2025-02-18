@@ -22,21 +22,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { loginSchema } from '@/lib/schema/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { login } from '../actions';
 import { ContinueButton } from '../components/continue-button';
-
-const loginSchema = z.object({
-  email: z
-    .string()
-    .nonempty('This field is required')
-    .email('Must be a valid email'),
-  password: z.string().nonempty('This field is required'),
-});
 
 export default function LoginPage() {
   // Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
@@ -45,7 +39,7 @@ export default function LoginPage() {
     <div className="flex flex-row items-stretch justify-center h-full w-full">
       <section className="bg-background w-1/2 flex items-center justify-center">
         <div className="flex flex-col items-center justify-center h-full">
-          <LoginForm onSuccess={() => toast.success('Login Successful')} />
+          <LoginForm />
           <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
             <Separator className="grow shrink !bg-foreground/40" />
             <p className="text-foreground/70 text-lg">OR</p>
@@ -86,7 +80,7 @@ export default function LoginPage() {
   );
 }
 
-const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
+const LoginForm = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -96,11 +90,12 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
   });
 
   async function onSubmit(data: z.infer<typeof loginSchema>) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const error = await login(data);
 
-    console.log(data);
-
-    onSuccess();
+    if (error) {
+      toast.error(error);
+      return;
+    }
   }
 
   return (
