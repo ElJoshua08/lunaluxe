@@ -4,7 +4,9 @@ import { cookies } from 'next/headers';
 export async function createClient() {
   const cookieStore = await cookies();
 
-  console.log(cookieStore.getAll());
+  if(!cookieStore.getAll()) {
+    throw("No cookies stored");
+  }
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
