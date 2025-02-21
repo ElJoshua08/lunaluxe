@@ -11,6 +11,8 @@ export async function createClient() {
     return { error: "No ENV variables found" }
   }
 
+  const cookieStore = await cookies();
+
   return {
     supabase: createServerClient(
       SUPABASE_URL,
