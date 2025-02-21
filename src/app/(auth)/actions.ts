@@ -9,7 +9,11 @@ import { SignUpWithPasswordCredentials } from '@supabase/supabase-js';
 import { z } from 'zod';
 
 export async function login(data: z.infer<typeof loginSchema>) {
-  const supabase = await createClient();
+  const { error: clientError, supabase } = await createClient();
+
+  if (clientError) {
+    return clientError;
+  }
 
   const { error } = await supabase.auth.signInWithPassword(data);
 
