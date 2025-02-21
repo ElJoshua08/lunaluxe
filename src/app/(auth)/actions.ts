@@ -11,7 +11,7 @@ import { z } from 'zod';
 export async function login(data: z.infer<typeof loginSchema>) {
   const { error: clientError, supabase } = await createClient();
 
-  if (clientError) {
+  if (clientError || !supabase) {
     return clientError;
   }
 
