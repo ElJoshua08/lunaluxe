@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { loginSchema, registerSchema } from '@/lib/schema/auth';
 import { createClient } from '@/lib/utils/supabase/server';
 import { SignUpWithPasswordCredentials } from '@supabase/supabase-js';
+import { headers } from 'next/headers';
 import { z } from 'zod';
 
 export async function login(data: z.infer<typeof loginSchema>) {
@@ -23,12 +24,13 @@ export async function login(data: z.infer<typeof loginSchema>) {
 
 export async function register(data: z.infer<typeof registerSchema>) {
   const supabase = await createClient();
+  const origin = (await headers()).get('origin');
 
   const { error } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
     options: {
-      emailRedirectTo: `${window.location.origin}/verify-email`,
+      emailRedirectTo: `${origin}/verify-email`,
       data: {
         display_name: `${data.firstName} ${data.lastName}`,
       },
@@ -38,7 +40,4 @@ export async function register(data: z.infer<typeof registerSchema>) {
   if (error) {
     return error.message;
   }
-
-  revalidatePath('/', 'layout');
-  redirect('/');
 }

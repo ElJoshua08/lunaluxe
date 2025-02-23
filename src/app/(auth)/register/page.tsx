@@ -25,6 +25,7 @@ import { registerSchema } from '@/lib/schema/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -32,10 +33,15 @@ import { register } from '../actions';
 import { ContinueButton } from '../components/continue-button';
 
 export default function RegisterPage() {
-  // Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
+  // * Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
+
+  const [open, setOpen] = useState(false);
+
+  console.log(open);
 
   return (
-    <div className="flex flex-row items-stretch justify-center h-full w-full">
+    <div className="flex flex-row items-stretch w-full h-full">
+      <SuccessCard open={open} />
       <section className="bg-primary w-1/2 flex items-center justify-center px-6">
         <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
           Because excellence is never accidental.
@@ -43,7 +49,7 @@ export default function RegisterPage() {
       </section>
       <section className="bg-background w-1/2 flex items-center justify-center">
         <div className="flex flex-col items-center justify-center h-full">
-          <RegisterForm />
+          <RegisterForm onSuccess={() => setOpen(true)} />
           <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
             <Separator className="grow shrink !bg-foreground/40" />
             <p className="text-foreground/70 text-lg">OR</p>
@@ -67,7 +73,7 @@ export default function RegisterPage() {
 
       <Link
         href="/login"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-12 p-[0.8rem]  bg-white 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-12 p-[0.8rem] bg-white 
        hover:scale-110 transition-all group shadow-md shadow-black/50 flex items-center justify-center"
       >
         <ChevronRight
@@ -79,7 +85,7 @@ export default function RegisterPage() {
   );
 }
 
-const RegisterForm = () => {
+const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -92,6 +98,8 @@ const RegisterForm = () => {
   });
 
   async function onSubmit(data: z.infer<typeof registerSchema>) {
+    onSuccess();
+    return;
     const error = await register(data);
 
     if (error) {
@@ -200,5 +208,31 @@ const RegisterForm = () => {
         </Button>
       </CardFooter>
     </Card>
+  );
+};
+
+const SuccessCard = ({ open }: { open: boolean }) => {
+  if (!open) return null;
+
+  return (
+    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50">
+      {/* // The overlay */}
+      <div className="absolute top-0 left-0 w-full h-full bg-background/80 -z-10 animate-fade animate-duration-200 animate-once animate-fill-forwards" />
+
+      {/* // The dialog */}
+      <Card className="animate-fade-up animate-delay-150 animate-duration-300 animate-onceanimate-fill-forwards">
+        <CardHeader>
+          <CardTitle className="text-xl">Welcome to lunaluxe!</CardTitle>
+          <CardDescription>
+            Some luxurious text about the brand.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <h1>
+            We will send you an email to verify your account.
+          </h1>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
