@@ -98,14 +98,14 @@ const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
   });
 
   async function onSubmit(data: z.infer<typeof registerSchema>) {
-    onSuccess();
-    return;
     const error = await register(data);
-
+    
     if (error) {
       toast.error(error);
       return;
     }
+    
+    onSuccess();
   }
 
   return (
