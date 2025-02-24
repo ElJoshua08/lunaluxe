@@ -20,24 +20,24 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { InputOTP } from '@/components/ui/input-otp';
 import { Separator } from '@/components/ui/separator';
-import { registerSchema } from '@/lib/schema/auth';
+import { registerSchema, verifySchema } from '@/lib/schema/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { register } from '../actions';
+import { register, verifyToken } from '../actions';
 import { ContinueButton } from '../components/continue-button';
 
 export default function RegisterPage() {
   // * Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
 
   const [open, setOpen] = useState(false);
-
-  console.log(open);
 
   return (
     <div className="flex flex-row items-stretch w-full h-full">
@@ -99,12 +99,12 @@ const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
   async function onSubmit(data: z.infer<typeof registerSchema>) {
     const error = await register(data);
-    
+
     if (error) {
       toast.error(error);
       return;
     }
-    
+
     onSuccess();
   }
 
@@ -212,6 +212,28 @@ const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
 };
 
 const SuccessCard = ({ open }: { open: boolean }) => {
+  const router = useRouter();
+
+  const form = useForm<z.infer<typeof verifySchema>>({
+    resolver: zodResolver(verifySchema),
+    defaultValues: {
+      otp: '',
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof verifySchema>) {
+    const error = await verifyToken(data.otp);
+
+    if (error) {
+      form.setError('otp', {
+        message: error,
+      });
+      return;
+    }
+
+    router.push('/');
+  }
+
   if (!open) return null;
 
   return (
@@ -220,18 +242,52 @@ const SuccessCard = ({ open }: { open: boolean }) => {
       <div className="absolute top-0 left-0 w-full h-full bg-background/80 -z-10 animate-fade animate-duration-200 animate-once animate-fill-forwards" />
 
       {/* // The dialog */}
-      <Card className="animate-fade-up animate-delay-150 animate-duration-300 animate-onceanimate-fill-forwards">
+      <Card className="animate-fade-up animate-delay-150 animate-duration-300 animate-onceanimate-fill-forwards max-w-md">
         <CardHeader>
-          <CardTitle className="text-xl">Welcome to lunaluxe!</CardTitle>
+          <CardTitle className="text-3xl">Welcome to lunaluxe!</CardTitle>
           <CardDescription>
-            Some luxurious text about the brand.
+            Before continuing, please verify your account. We have sent you an
+            email with a 6-digit code.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <h1>
-            We will send you an email to verify your account.
-          </h1>
+        <CardContent className="flex items-center justify-center gap-y-2 flex-col mt-4">
+          <Form {...form}>
+            <FormField
+              control={form.control}
+              name="otp"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <InputOTP
+                      disabled={form.formState.isSubmitting}
+                      value={field.value}
+                      onChange={(value) => {
+                        // Validamos que solo contenga números
+                        if (/^\d*$/.test(value)) {
+                          field.onChange(value);
+                        }
+
+                        if (value.length === 6) {
+                          form.handleSubmit(onSubmit)();
+                        }
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Form>
         </CardContent>
+        <CardFooter className="flex items-center justify-center gap-x-2">
+          <Button
+            className="w-full"
+            onClick={form.handleSubmit(onSubmit)}
+            loading={form.formState.isSubmitting}
+          >
+            Verify
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );
