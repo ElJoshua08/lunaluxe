@@ -46,6 +46,23 @@ export async function register(data: z.infer<typeof registerSchema>) {
   }
 }
 
+export async function resendEmail(email: string) {
+  const supabase = await createClient();
+  const origin = (await headers()).get('origin');
+
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: email,
+    options: {
+      emailRedirectTo: `${origin}/verify-email`,
+    },
+  });
+
+  if (error) {
+    return error.message;
+  }
+}
+
 export async function verifyEmail(token: string, tokenHash: string) {
   const supabase = await createClient();
 

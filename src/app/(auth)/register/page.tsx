@@ -29,17 +29,26 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { register } from '../actions';
+import { register, resendEmail } from '../actions';
 import { ContinueButton } from '../components/continue-button';
 
 export default function RegisterPage() {
   // * Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
 
   const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState<string>();
+
+  async function onSuccess(email: string) {
+    setOpen(true);
+    setEmail(email);
+  }
 
   return (
     <div className="flex flex-row items-stretch w-full h-full">
-      <SuccessCard open={open} />
+      <SuccessCard
+        open={open}
+        email={email}
+      />
       <section className="bg-primary w-1/2 flex items-center justify-center px-6">
         <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
           Because excellence is never accidental.
@@ -47,7 +56,7 @@ export default function RegisterPage() {
       </section>
       <section className="bg-background w-1/2 flex items-center justify-center">
         <div className="flex flex-col items-center justify-center h-full">
-          <RegisterForm onSuccess={() => setOpen(true)} />
+          <RegisterForm onSuccess={(email) => onSuccess(email)} />
           <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
             <Separator className="grow shrink !bg-foreground/40" />
             <p className="text-foreground/70 text-lg">OR</p>
@@ -83,7 +92,11 @@ export default function RegisterPage() {
   );
 }
 
-const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
+const RegisterForm = ({
+  onSuccess,
+}: {
+  onSuccess: (email: string) => void;
+}) => {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -103,7 +116,7 @@ const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
       return;
     }
 
-    onSuccess();
+    onSuccess(data.email);
   }
 
   return (
@@ -209,8 +222,8 @@ const RegisterForm = ({ onSuccess }: { onSuccess: () => void }) => {
   );
 };
 
-const SuccessCard = ({ open }: { open: boolean }) => {
-  if (!open) return null;
+const SuccessCard = ({ open, email }: { open: boolean; email?: string }) => {
+  if (!open || !email) return null;
 
   return (
     <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50">
@@ -235,7 +248,14 @@ const SuccessCard = ({ open }: { open: boolean }) => {
         </CardContent>
 
         <CardFooter className="flex items-center justify-center gap-x-2">
-          <Button variant="default">Resend Email</Button>
+          <Button
+            variant="default"
+            className="w-full"
+            onClick={async () => resendEmail(email)}
+            loadOnClick
+          >
+            Resend Email
+          </Button>
         </CardFooter>
       </Card>
     </div>
