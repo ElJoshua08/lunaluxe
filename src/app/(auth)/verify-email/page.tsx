@@ -1,10 +1,10 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { verifyEmail } from '../actions';
 
-export default function VerifyEmailPage() {
+const VerifyEmailPage = () => {
   const searchParams = useSearchParams();
 
   const [error, setError] = useState<string | null>(null);
@@ -42,4 +42,10 @@ export default function VerifyEmailPage() {
   }
 
   return <div>Loading...</div>;
+};
+
+export default function Wrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>{<VerifyEmailPage />}</Suspense>
+  );
 }
