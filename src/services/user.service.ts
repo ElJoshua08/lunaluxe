@@ -7,11 +7,31 @@ import { loginSchema, registerSchema } from '@/lib/schema/auth';
 import { createClient } from '@/lib/utils/supabase/server';
 import {
   SignUpWithPasswordCredentials,
+  User,
   VerifyOtpParams,
 } from '@supabase/supabase-js';
 import { headers } from 'next/headers';
 
 import { z } from 'zod';
+
+export async function getUser(): Promise<{
+  user?: User;
+  error?: Error;
+}> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    return {
+      error: error,
+    };
+  }
+
+  return {
+    user: data.user,
+  };
+}
 
 export async function login(data: z.infer<typeof loginSchema>) {
   const supabase = await createClient();
@@ -30,11 +50,14 @@ export async function register(data: z.infer<typeof registerSchema>) {
   const supabase = await createClient();
   const origin = (await headers()).get('origin');
 
+  console.log(origin);
+
   const { error } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
     options: {
       emailRedirectTo: `${origin}/verify-email`,
+
       data: {
         display_name: `${data.firstName} ${data.lastName}`,
       },

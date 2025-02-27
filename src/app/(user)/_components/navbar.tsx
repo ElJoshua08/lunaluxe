@@ -1,11 +1,14 @@
 'use client';
 
+import { Avatar } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
+import { AvatarFallback } from '@radix-ui/react-avatar';
+import { User } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from '../../../components/icons/logo';
 
-export const Navbar = () => {
+export const Navbar = ({ user }: { user?: User }) => {
   const pathname = usePathname();
 
   const links = [
@@ -57,16 +60,26 @@ export const Navbar = () => {
         })}
       </ul>
 
-      <Link
-        className={buttonVariants({
-          variant: 'default',
-          size: 'lg',
-          className: 'cursor-pointer text-base',
-        })}
-        href="/login"
-      >
-        Login
-      </Link>
+      {/* Here we place the login button or the user avatar */}
+      {/* The avatar is actually a dropdown menu for diferent options */}
+      {user ? (
+        <Avatar className="flex items-center justify-center">
+          <AvatarFallback className="flex items-center justify-center bg-foreground text-background font-bold rounded-full size-16 text-xl cursor-pointer shadow-sm shadow-foreground/50">
+            {user.user_metadata.display_name.slice(0, 1)}
+          </AvatarFallback>
+        </Avatar>
+      ) : (
+        <Link
+          className={buttonVariants({
+            variant: 'default',
+            size: 'lg',
+            className: 'cursor-pointer text-base',
+          })}
+          href="/login"
+        >
+          Login
+        </Link>
+      )}
     </nav>
   );
 };
