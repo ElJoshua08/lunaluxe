@@ -29,8 +29,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { register, resendEmail } from '../actions';
 import { ContinueButton } from '../components/continue-button';
+import { register, resendEmail } from '@/services/user.service';
 
 export default function RegisterPage() {
   // * Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟

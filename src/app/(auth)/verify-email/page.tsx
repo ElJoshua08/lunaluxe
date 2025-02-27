@@ -1,8 +1,8 @@
 'use client';
 
+import { verifyEmail } from '@/services/user.service';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
-import { verifyEmail } from '../actions';
 
 const VerifyEmailPage = () => {
   const searchParams = useSearchParams();
