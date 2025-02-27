@@ -63,12 +63,11 @@ export async function resendEmail(email: string) {
   }
 }
 
-export async function verifyEmail(token: string, tokenHash: string) {
+export async function verifyEmail(tokenHash: string) {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.verifyOtp({
     type: 'email',
-    token: token,
     token_hash: tokenHash,
   } as VerifyOtpParams);
 
