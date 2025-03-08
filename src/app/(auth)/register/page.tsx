@@ -21,34 +21,54 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { registerSchema } from '@/lib/schema/auth';
+import { register, resendEmail } from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { ContinueButton } from '../components/continue-button';
-import { register, resendEmail } from '@/services/user.service';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   // * Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
 
-  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const { getValue } = useLocalStorage();
+
   const [email, setEmail] = useState<string>();
 
   async function onSuccess(email: string) {
-    setOpen(true);
     setEmail(email);
   }
 
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && email) {
+        // * Here we get the variables from localstorage and shit and giggles.
+
+        const isEmailVerified = getValue('isEmailVerified');
+
+        if (isEmailVerified) {
+          router.push('/');
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [email, getValue, router]);
+
   return (
     <div className="flex flex-row items-stretch w-full h-full">
-      <SuccessCard
-        open={open}
-        email={email}
-      />
+      <SuccessCard email={email} />
       <section className="bg-primary w-1/2 flex items-center justify-center px-6">
         <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
           Because excellence is never accidental.
@@ -222,13 +242,13 @@ const RegisterForm = ({
   );
 };
 
-const SuccessCard = ({ open, email }: { open: boolean; email?: string }) => {
-  if (!open || !email) return null;
+const SuccessCard = ({ email }: { email?: string }) => {
+  if (!email) return null;
 
   return (
     <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50">
       {/* // The overlay */}
-      <div className="absolute top-0 left-0 w-full h-full bg-background/80 -z-10 animate-fade animate-duration-200 animate-once animate-fill-forwards" />
+      <div className="absolute top-0 left-0 w-full h-full bg-black/80 -z-10 animate-fade animate-duration-200 animate-once animate-fill-forwards" />
 
       {/* // The dialog */}
       <Card className="animate-fade-up animate-delay-150 animate-duration-300 animate-once animate-fill-forwards max-w-md">

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 const {
   NEXT_PUBLIC_SUPABASE_URL: SUPABASE_URL,
-  NEXT_SUPABASE_ANON_KEY: SUPABASE_KEY,
+  SUPABASE_SERVICE_ROLE_KEY: SUPABASE_KEY,
 } = process.env;
 
 export async function createClient() {
