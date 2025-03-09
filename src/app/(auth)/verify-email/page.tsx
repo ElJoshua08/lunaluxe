@@ -33,6 +33,12 @@ const VerifyEmailPage = () => {
         return;
       }
 
+      // Here we add the isEmailVerified to the localstorage
+      localStorage.setItem(
+        'emailVerification',
+        JSON.stringify({ isVerified: true })
+      );
+
       setSuccess(true);
     }
 

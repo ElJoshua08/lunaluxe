@@ -21,39 +21,51 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
 import { registerSchema } from '@/lib/schema/auth';
 import { register, resendEmail } from '@/services/user.service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { ContinueButton } from '../components/continue-button';
-import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   // * Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
 
   const router = useRouter();
-  const { getValue } = useLocalStorage();
 
-  const [email, setEmail] = useState<string>();
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const [email, setEmail] = useState<string | undefined>();
 
   async function onSuccess(email: string) {
     setEmail(email);
+    setIsVerifying(true);
+
+    localStorage.setItem(
+      'emailVerification',
+      JSON.stringify({ isVerifying: true })
+    );
   }
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && email) {
+      if (document.visibilityState === 'visible') {
         // * Here we get the variables from localstorage and shit and giggles.
 
-        const isEmailVerified = getValue('isEmailVerified');
+        const { isVerified, isVerifying, email } = JSON.parse(
+          localStorage.getItem('emailVerification') || '{}'
+        );
 
-        if (isEmailVerified) {
+        if (isVerifying && email) {
+          setIsVerifying(isVerifying);
+          setEmail(email);
+        }
+
+        if (isVerified) {
           router.push('/');
         }
       }
@@ -61,14 +73,16 @@ export default function RegisterPage() {
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    return () => {
+    return () =>
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [email, getValue, router]);
+  }, [isVerifying, router]);
 
   return (
     <div className="flex flex-row items-stretch w-full h-full">
-      <SuccessCard email={email} />
+      <SuccessCard
+        isVerifying={isVerifying}
+        email={email}
+      />
       <section className="bg-primary w-1/2 flex items-center justify-center px-6">
         <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
           Because excellence is never accidental.
@@ -242,8 +256,14 @@ const RegisterForm = ({
   );
 };
 
-const SuccessCard = ({ email }: { email?: string }) => {
-  if (!email) return null;
+const SuccessCard = ({
+  isVerifying,
+  email,
+}: {
+  isVerifying: boolean;
+  email?: string;
+}) => {
+  if (!isVerifying || !email) return null;
 
   return (
     <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50">
