@@ -50,8 +50,6 @@ export async function register(data: z.infer<typeof registerSchema>) {
   const supabase = await createClient();
   const origin = (await headers()).get('origin');
 
-  // * Here we should also do some time of localstorage variable to determine if the user has already verified the email, and redirect to the 
-
   const { error: authError } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
