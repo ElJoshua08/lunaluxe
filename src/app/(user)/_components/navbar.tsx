@@ -59,22 +59,32 @@ export const Navbar = ({ user }: { user?: User }) => {
         })}
       </ul>
 
-      {/* Here we place the login button or the user avatar */}
-      {/* The avatar is actually a dropdown menu for diferent options */}
-      {user ? (
-        <AccountDropdown user={user} />
-      ) : (
-        <Link
-          className={buttonVariants({
-            variant: 'default',
-            size: 'lg',
-            className: 'cursor-pointer text-base',
-          })}
-          href="/login"
-        >
-          Login
-        </Link>
-      )}
+      <div className="flex flex-row items-center gap-x-4">
+        {/* Here we place a dashboard button if the user has the label of admin */}
+        {user ? (
+          user?.user_metadata?.role === 'admin' ? (
+            <Link
+              className={buttonVariants({ variant: 'default' })}
+              href={'/dashboard'}
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <AccountDropdown user={user} />
+          )
+        ) : (
+          <Link
+            className={buttonVariants({
+              variant: 'default',
+              size: 'lg',
+              className: 'cursor-pointer text-base',
+            })}
+            href="/login"
+          >
+            Login
+          </Link>
+        )}
+      </div>
     </nav>
   );
 };

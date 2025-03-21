@@ -12,8 +12,8 @@ export const AccountDropdown = ({ user }: { user: User }) => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
-        <Avatar className="flex items-center justify-center">
-          <AvatarFallback className="flex items-center justify-center bg-foreground text-background font-bold rounded-full size-16 text-2xl cursor-pointer shadow-sm shadow-foreground/50 font-italianno">
+        <Avatar className="flex items-center justify-center size-[45px]">
+          <AvatarFallback className="flex items-center justify-center bg-secondary text-background font-bold rounded-full size-20 text-2xl cursor-pointer shadow-sm shadow-foreground/50 font-italianno">
             {user.user_metadata.display_name.slice(0, 1)}
           </AvatarFallback>
         </Avatar>

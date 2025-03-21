@@ -78,12 +78,12 @@ export default function RegisterPage() {
   }, [isVerifying, router]);
 
   return (
-    <div className="flex flex-row items-stretch w-full h-full">
+    <div className="flex flex-row justify-center lg:items-stretch w-full h-full">
       <SuccessCard
         isVerifying={isVerifying}
         email={email}
       />
-      <section className="bg-primary w-1/2 flex items-center justify-center px-6">
+      <section className="bg-primary w-1/2 items-center justify-center px-6 hidden lg:flex">
         <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
           Because excellence is never accidental.
         </h1>
@@ -115,7 +115,7 @@ export default function RegisterPage() {
       <Link
         href="/login"
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-12 p-[0.8rem] bg-white 
-       hover:scale-110 transition-all group shadow-md shadow-black/50 flex items-center justify-center"
+       hover:scale-110 transition-all group shadow-md shadow-black/50 items-center justify-center hidden lg:flex"
       >
         <ChevronRight
           className="text-black size-32 rotate-180 "
