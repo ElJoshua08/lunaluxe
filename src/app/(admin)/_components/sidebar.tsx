@@ -1,13 +1,25 @@
-"use client";
+'use client';
 
-import { buttonVariants } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
-import { cn } from "@/lib/utils";
-import { User } from "@supabase/supabase-js";
-import { ChevronsUpDownIcon, MoonIcon, SettingsIcon, SunIcon, UserIcon } from "lucide-react";
-import { useTheme } from "next-themes";
-import Link from "next/link";
+import { buttonVariants } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
+import { DropdownMenuItemProps } from '@radix-ui/react-dropdown-menu';
+import { User } from '@supabase/supabase-js';
+import {
+  ChevronsUpDownIcon,
+  MoonIcon,
+  SettingsIcon,
+  SunIcon,
+  UserIcon,
+} from 'lucide-react';
+import { useTheme } from 'next-themes';
+import Link from 'next/link';
 
 export interface SidebarProps {
   user: User;
@@ -86,23 +98,20 @@ const CustomDropdownMenuItem = ({
   ...props
 }: CustomDropdownMenuItemProps) => {
   return (
-    <DropdownMenuItem
-      className="flex flex-row gap-x-4 h-10"
-      {...props}
-    >
+    <DropdownMenuItem {...props}>
       {href ? (
         <Link
           href={href}
-          className="flex items-center gap-2"
+          className="flex flex-row items-center justify-start gap-x-2  h-10 cursor-pointer"
         >
           <Icon className="size-5 text-foreground/70" />
           {children}
         </Link>
       ) : (
-        <>
+        <div className="flex flex-row items-center justify-start gap-x-2  h-10 cursor-pointer">
           <Icon className="size-5 text-foreground/70" />
           {children}
-        </>
+        </div>
       )}
     </DropdownMenuItem>
   );
