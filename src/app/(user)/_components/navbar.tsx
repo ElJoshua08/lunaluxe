@@ -33,7 +33,7 @@ export const Navbar = ({ user }: { user?: User }) => {
     <nav className="flex flex-row items-center justify-between px-4 py-4 w-full backdrop-blur-xl bg-background/50 top-0 z-10 sticky">
       {/* Logo and Name */}
       <div className="flex items-center">
-        <Link href="/">
+        <Link href="/" prefetch>
           <Logo
             size="30px"
             className="text-foreground fill-foreground"
@@ -45,7 +45,7 @@ export const Navbar = ({ user }: { user?: User }) => {
       </div>
 
       {/* Hamburguer menu for mobile */}
-      <div>
+      <div className='md:hidden flex'>
         <button onClick={() => setDrawerOpen(true)}>
           {!drawerOpen && <MenuIcon className="h-6 w-6" />}
         </button>
@@ -53,7 +53,7 @@ export const Navbar = ({ user }: { user?: User }) => {
         <div
           className={`${
             drawerOpen ? 'block' : 'hidden'
-          } absolute top-0 left-0 w-full h-screen bg-black/50 backdrop-blur-xl z-20`}
+          } absolute top-0 left-0 w-full h-screen bg-black/50 backdrop-blur-xl z-20 rotate-in`}
         />
 
         <div
@@ -61,13 +61,25 @@ export const Navbar = ({ user }: { user?: User }) => {
             drawerOpen ? 'block' : 'hidden'
           } bg-background rounded-b-lg w-full top-0 left-0 h-72 z-40 absolute`}
         >
-          <h1 className="text-lg mt-4 ml-4">Menu</h1>
           <button
             onClick={() => setDrawerOpen(false)}
             className="absolute top-4 right-4"
           >
             <XIcon />
           </button>
+          <h1 className="text-lg mt-4 ml-4">Menu</h1>
+          <ul className="flex flex-col gap-y-4">
+            {links.map((link) => {
+              return (
+                <li
+                  key={link.name}
+                  className="text-lg ml-4 mt-2"
+                >
+                  <Link href={link.href}>{link.name}</Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
 
