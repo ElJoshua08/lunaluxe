@@ -13,31 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Welcome.md",
+                "file": "Lunaluxe.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Welcome"
+              "title": "Lunaluxe"
             }
-          }
-        ]
-      },
-      {
-        "id": "03f54fcccb62e289",
-        "type": "tabs",
-        "children": [
+          },
           {
-            "id": "53c313d97209e70b",
+            "id": "f421a444b8762396",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Task Track.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Task Track"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -110,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Welcome.md",
+                "file": "Task Track.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -120,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Welcome"
+              "title": "Backlinks for Task Track"
             }
           },
           {
@@ -184,8 +183,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "9523d2adae21ec1a",
+  "active": "f421a444b8762396",
   "lastOpenFiles": [
-    "Welcome.md"
+    "Lunaluxe.md",
+    "Task Track.md"
   ]
 }
