@@ -1,6 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { productBasicInfoSchema } from "@/lib/schema/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -12,7 +14,7 @@ import { z } from "zod"
 
 export default function CreateProductPage() {
   /* Here the plan is to make a multi-step form with the following steps:
-    1. Product basics: Name, description, price, category, etc.
+    1. Product basics: Name, description (rich text), price, category, etc.
     2. Product visuals: Images, models, multiple colors etc.
     3. Product customization: Colors, Sizes, Custom Texts etc. 
     4. Product delivery: Shipping time, production time, etc.
@@ -33,7 +35,7 @@ export default function CreateProductPage() {
   return (
     <main className="flex h-full w-full flex-col items-start justify-start p-8">
       {/* Form Header */}
-      <header className="flex h-8 w-full items-center justify-start mb-2">
+      <header className="mb-2 flex h-8 w-full items-center justify-start">
         <h1 className="text-center text-base">
           Create Product -{" "}
           <strong className="text-xl">Step {currentStep}</strong>
@@ -43,7 +45,40 @@ export default function CreateProductPage() {
       <Separator />
 
       {/* Form Body */}
-      <div className="flex h-full w-full"></div>
+      <div className="mt-4 flex h-full w-full">
+        {/* Here we change the form depending on the current step, maybe we can use a custom component for that */}
+        <Form {...method}>
+          <form className="flex h-full w-full flex-col items-start justify-start gap-y-4">
+            <FormField
+              control={method.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input {...field} placeholder="Name" className="w-full" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={method.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Ex. 100€"
+                      className="w-full"
+                      type="number"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
 
       {/* Form Footer */}
       <footer className="flex w-full flex-row items-center justify-around gap-x-12">
