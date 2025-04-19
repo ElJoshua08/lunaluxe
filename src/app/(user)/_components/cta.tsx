@@ -9,7 +9,7 @@ export const CTA = ({ className }: { className?: string }) => {
       className={cn(
         className,
         buttonVariants({ variant: 'accent' }),
-        'transition-duration-200 h-auto py-3 text-xl transition-[width,all] hover:shadow-lg hover:shadow-accent/70'
+        'transition-duration-200 h-auto py-3 text-xl transition-[width,all] hover:shadow-lg hover:shadow-accent/70 text-black'
       )}>
       Explore our collection
     </Link>
