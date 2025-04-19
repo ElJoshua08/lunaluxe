@@ -41,22 +41,34 @@ body {
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 90%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 15.1% 36.5%;
-    --secondary: 25.7 55.3% 70.2%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --acent: 165.3 36.1% 57.6%;
-    --destructive: 0 72.8% 50.6%;
+    --background: 240 5% 6%;
+    --foreground: 0 0% 95%;
+
+    --card: 240 4% 10%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 240 4% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 0 30% 55%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 25.7 75% 75%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 4% 18%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 165.5 70% 50%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+
+    --border: 240 4% 20%;
+    --input: 240 4% 20%;
+    --ring: 240 5% 65%;
+
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -73,8 +85,6 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-
 
 @layer base {
   * {

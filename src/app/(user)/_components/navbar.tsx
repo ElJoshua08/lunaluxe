@@ -30,7 +30,7 @@ export const Navbar = ({ user }: { user?: User }) => {
   ];
 
   return (
-    <nav className="flex flex-row items-center justify-between px-4 py-4 w-full backdrop-blur-xl bg-background/50 top-0 z-10 sticky">
+    <nav className="flex flex-row items-center justify-between px-4 py-4 w-full backdrop-blur-xl bg-background top-0 z-10 sticky">
       {/* Logo and Name */}
       <div className="flex items-center">
         <Link href="/" prefetch>
@@ -45,20 +45,21 @@ export const Navbar = ({ user }: { user?: User }) => {
       </div>
 
       {/* Hamburguer menu for mobile */}
-      <div className='md:hidden flex'>
+      <div className='md:hidden flex z-30'>
         <button onClick={() => setDrawerOpen(true)}>
           {!drawerOpen && <MenuIcon className="h-6 w-6" />}
         </button>
 
-        <div
+        {/* Overlay */}
+        <div  
           className={`${
-            drawerOpen ? 'block' : 'hidden'
+            drawerOpen ? 'block animate-fade animate-duration-100' : 'hidden'
           } absolute top-0 left-0 w-full h-screen bg-black/50 backdrop-blur-xl z-20 rotate-in`}
         />
 
         <div
           className={`${
-            drawerOpen ? 'block' : 'hidden'
+            drawerOpen ? 'block animate-fade-down animate-duration-100 animate-delay-100' : 'hidden'
           } bg-background rounded-b-lg w-full top-0 left-0 h-72 z-40 absolute`}
         >
           <button
