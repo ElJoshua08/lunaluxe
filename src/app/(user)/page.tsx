@@ -10,15 +10,17 @@ import { SectionSelector } from './_components/section-selector'
 
 export default function Home() {
   return (
-    
     <div className="top-0 flex h-full w-full flex-col items-center justify-start overflow-x-clip">
       {/* Section Selector */}
-      <SectionSelector containerClassname='right-7 bottom-20 md:bottom-40 md:right-12' selectorClassname='h-8 md:h-3' />
+      <SectionSelector
+        containerClassname="right-7 bottom-20 md:bottom-40 md:right-12"
+        selectorClassname="h-8 md:h-3"
+      />
 
       {/* First Section */}
       <section id="hero" className="h-full w-full shrink-0 grow">
         {/* Hero Section */}
-        <div className="relative -z-[5] mt-20 flex flex-row items-center justify-center gap-x-8 bg-secondary px-32 py-8 dark:bg-primary w-full">
+        <div className="relative -z-[5] mt-20 flex w-full flex-row items-center justify-center gap-x-8 bg-secondary px-32 py-8 dark:bg-primary">
           <TextAnimate
             by="word"
             animation="blurInUp"
@@ -60,7 +62,7 @@ export default function Home() {
         <ChevronDown
           size={32}
           strokeWidth={2}
-          className="absolute bottom-10 left-1/2 z-0 size-10 -translate-x-1/2 animate-bounce cursor-pointer rounded-full border-2 border-foreground p-2 text-foreground animate-duration-[1500ms] animate-infinite animate-ease-in-out"
+          className="absolute bottom-10 left-1/2 z-0 -translate-x-1/2 animate-bounce cursor-pointer text-foreground animate-duration-[1500ms] animate-infinite animate-ease-in-out"
           onClick={() => {
             document.getElementById('about-us')?.scrollIntoView({
               behavior: 'smooth',
