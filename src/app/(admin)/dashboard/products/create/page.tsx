@@ -149,8 +149,6 @@ export default function CreateProductPage() {
               />
             </div>
 
-            {/* Here a little chanllenge for myself, i want to make a custom component that is a rich text editor, having like bold, italic, underline, etc. I want to make use of it in the form for the product description. */}
-
             <div className="flex h-full w-full flex-col items-start justify-start md:w-1/2">
               <FormField
                 control={method.control}
