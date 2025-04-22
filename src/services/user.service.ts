@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { loginSchema, registerSchema } from '@/lib/schema/auth';
-import { createClient } from '@/lib/utils/supabase/server';
+import { createServerClient } from '@/lib/utils/supabase/server';
 import {
   SignUpWithPasswordCredentials,
   User,
@@ -18,7 +18,7 @@ export async function getUser(): Promise<{
   user?: User;
   error?: Error;
 }> {
-  const supabase = await createClient();
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase.auth.getUser();
 
@@ -34,7 +34,7 @@ export async function getUser(): Promise<{
 }
 
 export async function login(data: z.infer<typeof loginSchema>) {
-  const supabase = await createClient();
+  const supabase = await createServerClient()
 
   const { error } = await supabase.auth.signInWithPassword(data);
 
@@ -47,7 +47,7 @@ export async function login(data: z.infer<typeof loginSchema>) {
 }
 
 export async function register(data: z.infer<typeof registerSchema>) {
-  const supabase = await createClient();
+  const supabase = await createServerClient()
   const origin = (await headers()).get('origin');
 
   const { error: authError } = await supabase.auth.signUp({
@@ -80,7 +80,7 @@ export async function register(data: z.infer<typeof registerSchema>) {
 }
 
 export async function resendEmail(email: string) {
-  const supabase = await createClient();
+  const supabase = await createServerClient()
   const origin = (await headers()).get('origin');
 
   const { error } = await supabase.auth.resend({
@@ -97,7 +97,7 @@ export async function resendEmail(email: string) {
 }
 
 export async function verifyEmail(tokenHash: string) {
-  const supabase = await createClient();
+  const supabase = await createServerClient()
 
   const { error } = await supabase.auth.verifyOtp({
     type: 'email',

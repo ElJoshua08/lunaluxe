@@ -12,12 +12,21 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { MinimalTiptapEditor } from "@/components/ui/minimal-tiptap"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { useCategories } from "@/hooks/useCategory"
 import { productBasicInfoSchema } from "@/lib/schema/auth"
+import { getCategories } from "@/services/category.service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { motion } from "framer-motion"
 import { Check, ChevronRight } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -30,23 +39,27 @@ export default function CreateProductPage() {
    */
 
   /* The next thing is to upload all the images models and data into the db using supabase storage and databases. */
-
   // * Some variables to make the experience better
   const steps = ["Basics", "Visuals", "Customization", "Delivery"]
+
+  // * Categories get from the service
+  const { categories, loading } = useCategories()
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentStep, setCurrentStep] = useState(0)
 
   // * Here in the page i want to have the form with the useForm.
-
   const method = useForm<z.infer<typeof productBasicInfoSchema>>({
     resolver: zodResolver(productBasicInfoSchema),
     defaultValues: {
       name: "",
       description: "",
-      price: 0.1,
-      category: "rings",
+      price: 0,
+      category: "",
     },
   })
+
+  if(loading) return <div>Loading...</div>
 
   return (
     <main className="flex h-full w-full flex-col items-start justify-start p-8">
@@ -65,7 +78,7 @@ export default function CreateProductPage() {
         {/* Here we change the form depending on the current step, maybe we can use a custom component for that */}
         <Form {...method}>
           <form className="flex h-full w-full flex-col items-start justify-start gap-x-8 gap-y-4 md:flex-row">
-            <div className="flex md:h-full w-full flex-col items-start justify-start gap-y-4 md:w-1/2">
+            <div className="flex w-full flex-col items-start justify-start gap-y-4 md:h-full md:w-1/2">
               <FormField
                 control={method.control}
                 name="name"
@@ -104,6 +117,37 @@ export default function CreateProductPage() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={method.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Category</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent className="w-full">
+                          {categories.map((category) => {
+                            return (
+                              <SelectItem key={category} value={category}>
+                                {category}
+                              </SelectItem>
+                            )
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormDescription>
+                      The category you want to give to your product.
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* Here a little chanllenge for myself, i want to make a custom component that is a rich text editor, having like bold, italic, underline, etc. I want to make use of it in the form for the product description. */}
@@ -119,6 +163,7 @@ export default function CreateProductPage() {
                       <MinimalTiptapEditor
                         className="h-[calc(100%-80px)]"
                         onChange={field.onChange}
+                        immediatelyRender={false}
                         value={field.value}
                       />
                     </FormControl>

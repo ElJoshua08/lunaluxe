@@ -1,4 +1,5 @@
-import { createServerClient } from '@supabase/ssr';
+import { createServerClient as supabaseCreateServerClient } from '@supabase/ssr';
+import { createClient as supabaseCreateClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 
 const {
@@ -6,14 +7,14 @@ const {
   SUPABASE_SERVICE_ROLE_KEY: SUPABASE_KEY,
 } = process.env;
 
-export async function createClient() {
+export async function createServerClient() {
   if (!SUPABASE_URL || !SUPABASE_KEY) {
     throw new Error('Missing ENV variables');
   }
 
   const cookieStore = await cookies();
 
-  return createServerClient(SUPABASE_URL, SUPABASE_KEY, {
+  return supabaseCreateServerClient(SUPABASE_URL, SUPABASE_KEY, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
@@ -31,4 +32,12 @@ export async function createClient() {
       },
     },
   });
+}
+
+export async function createClient() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    throw new Error('Missing ENV variables');
+  }
+
+  return supabaseCreateClient(SUPABASE_URL, SUPABASE_KEY);
 }
