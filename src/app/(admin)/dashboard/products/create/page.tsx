@@ -22,11 +22,10 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { useCategories } from "@/hooks/useCategory"
 import { productBasicInfoSchema } from "@/lib/schema/auth"
-import { getCategories } from "@/services/category.service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { motion } from "framer-motion"
 import { Check, ChevronRight } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -59,7 +58,7 @@ export default function CreateProductPage() {
     },
   })
 
-  if(loading) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>
 
   return (
     <main className="flex h-full w-full flex-col items-start justify-start p-8">
