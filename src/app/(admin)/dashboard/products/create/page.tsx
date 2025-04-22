@@ -30,13 +30,19 @@ export default function CreateProductPage() {
   /* The next thing is to upload all the images models and data into the db using supabase storage and databases. */
 
   // * Some variables to make the experience better
-  const totalSteps = 3
+  const steps = ["Basics", "Visuals", "Customization", "Delivery"]
   const [currentStep, setCurrentStep] = useState(0)
 
   // * Here in the page i want to have the form with the useForm.
 
   const method = useForm<z.infer<typeof productBasicInfoSchema>>({
     resolver: zodResolver(productBasicInfoSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      price: 0.1,
+      category: "rings",
+    },
   })
 
   return (
@@ -44,8 +50,8 @@ export default function CreateProductPage() {
       {/* Form Header */}
       <header className="mb-2 flex h-8 w-full items-center justify-start">
         <h1 className="text-center text-base">
-          Create Product -{" "}
-          <strong className="text-xl">Step {currentStep}</strong>
+          Step {currentStep + 1} -{" "}
+          <strong className="text-xl">{steps[currentStep]}</strong>
         </h1>
       </header>
 
@@ -83,13 +89,14 @@ export default function CreateProductPage() {
                       <Input
                         {...field}
                         placeholder="Ex. 100€"
+                        min="0.1"
                         className="w-full"
                         type="number"
                       />
                     </FormControl>
                     <FormDescription>
                       The price you want to give to your product, please use
-                      commas for the decimal point.
+                      dots for the decimal point. (50.99€)
                     </FormDescription>
                   </FormItem>
                 )}
@@ -97,6 +104,8 @@ export default function CreateProductPage() {
             </div>
 
             {/* Here a little chanllenge for myself, i want to make a custom component that is a rich text editor, having like bold, italic, underline, etc. I want to make use of it in the form for the product description. */}
+
+            <div className="flex h-full w-1/2 flex-col"></div>
           </form>
         </Form>
       </div>
@@ -106,22 +115,24 @@ export default function CreateProductPage() {
         {/* Timeline or smth like that */}
         <div className="flex w-full flex-row items-center justify-start">
           <span className="mr-2 w-14 shrink-0 text-lg text-foreground/85">
-            {currentStep} of {totalSteps}
+            {currentStep + 1} of {steps.length}
           </span>
-          <div className="h-2 w-full rounded-full bg-foreground/60">
+          <div className="h-2 w-full rounded-full bg-foreground/40">
             <motion.div
               className="h-2 rounded-full bg-foreground"
               initial={{ width: 0 }}
-              animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
+              animate={{
+                width: `${((currentStep + 1) / steps.length) * 100}%`,
+              }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
             />
           </div>
         </div>
 
         <Button
-          onClick={() => setCurrentStep((currentStep + 1) % (totalSteps + 1))}>
-          {currentStep === totalSteps ? "Create Product" : "Next Step"}{" "}
-          {currentStep === totalSteps ? <Check /> : <ChevronRight />}
+          onClick={() => setCurrentStep((currentStep + 1) % steps.length)}>
+          {currentStep + 1 === steps.length ? "Create Product" : "Next Step"}{" "}
+          {currentStep + 1 === steps.length ? <Check /> : <ChevronRight />}
         </Button>
       </footer>
     </main>
