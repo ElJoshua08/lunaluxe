@@ -8,8 +8,10 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { MinimalTiptapEditor } from "@/components/ui/minimal-tiptap"
 import { Separator } from "@/components/ui/separator"
 import { productBasicInfoSchema } from "@/lib/schema/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -31,6 +33,7 @@ export default function CreateProductPage() {
 
   // * Some variables to make the experience better
   const steps = ["Basics", "Visuals", "Customization", "Delivery"]
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentStep, setCurrentStep] = useState(0)
 
   // * Here in the page i want to have the form with the useForm.
@@ -61,8 +64,8 @@ export default function CreateProductPage() {
       <div className="mt-4 flex h-full w-full">
         {/* Here we change the form depending on the current step, maybe we can use a custom component for that */}
         <Form {...method}>
-          <form className="flex h-full w-full flex-col items-start justify-start gap-y-4">
-            <div className="flex h-full w-1/2 flex-col items-start justify-start gap-y-4">
+          <form className="flex h-full w-full flex-col items-start justify-start gap-x-8 gap-y-4 md:flex-row">
+            <div className="flex md:h-full w-full flex-col items-start justify-start gap-y-4 md:w-1/2">
               <FormField
                 control={method.control}
                 name="name"
@@ -105,7 +108,25 @@ export default function CreateProductPage() {
 
             {/* Here a little chanllenge for myself, i want to make a custom component that is a rich text editor, having like bold, italic, underline, etc. I want to make use of it in the form for the product description. */}
 
-            <div className="flex h-full w-1/2 flex-col"></div>
+            <div className="flex h-full w-full flex-col items-start justify-start md:w-1/2">
+              <FormField
+                control={method.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="h-full w-full">
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <MinimalTiptapEditor
+                        className="h-[calc(100%-80px)]"
+                        onChange={field.onChange}
+                        value={field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </form>
         </Form>
       </div>
@@ -117,7 +138,7 @@ export default function CreateProductPage() {
           <span className="mr-2 w-14 shrink-0 text-lg text-foreground/85">
             {currentStep + 1} of {steps.length}
           </span>
-          <div className="h-2 w-full rounded-full bg-foreground/40">
+          <div className="hidden h-2 w-full rounded-full bg-foreground/40 md:block">
             <motion.div
               className="h-2 rounded-full bg-foreground"
               initial={{ width: 0 }}
@@ -129,8 +150,7 @@ export default function CreateProductPage() {
           </div>
         </div>
 
-        <Button
-          onClick={() => setCurrentStep((currentStep + 1) % steps.length)}>
+        <Button onClick={method.handleSubmit((data) => console.log(data))}>
           {currentStep + 1 === steps.length ? "Create Product" : "Next Step"}{" "}
           {currentStep + 1 === steps.length ? <Check /> : <ChevronRight />}
         </Button>
