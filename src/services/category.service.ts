@@ -10,10 +10,6 @@ async function getCategories(): Promise<{
 
   const { data, error } = await supabase.from("category").select("name")
 
-  console.log(data)
-
-  console.error(error)
-
   return {
     data: data?.map(category => category.name) || [],
     error: error?.message,

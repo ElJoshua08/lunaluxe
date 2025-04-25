@@ -129,7 +129,11 @@ const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField()
+  const { formDescriptionId, error } = useFormField()
+  
+  if (error) {
+    return <FormMessage className={className} {...props} />
+  }
 
   return (
     <p

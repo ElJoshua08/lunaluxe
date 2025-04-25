@@ -1,62 +1,90 @@
 "use client"
 
+import {
+  Basics,
+  BasicsRef,
+} from "@/app/(admin)/dashboard/products/create/_components/basics"
+import {
+  Customization,
+  CustomizationRef,
+} from "@/app/(admin)/dashboard/products/create/_components/customization"
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { MinimalTiptapEditor } from "@/components/ui/minimal-tiptap"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { useCategories } from "@/hooks/useCategory"
-import { productBasicInfoSchema } from "@/lib/schema/auth"
-import { zodResolver } from "@hookform/resolvers/zod"
+import {
+  productBasicsType,
+  productCustomizationType,
+} from "@/lib/schema/product"
+import { createProduct } from "@/services/product.service"
 import { motion } from "framer-motion"
 import { Check, ChevronRight } from "lucide-react"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useRef, useState } from "react"
+import { toast } from "sonner"
 
 export default function CreateProductPage() {
-  /* Here the plan is to make a multi-step form with the following steps:
-    1. Product basics: Name, description (rich text), price, category, etc.
-    2. Product visuals: Images, models, multiple colors etc.
-    3. Product customization: Colors, Sizes, Custom Texts etc. 
-    4. Product delivery: Shipping time, production time, etc.
-   */
-
-  /* The next thing is to upload all the images models and data into the db using supabase storage and databases. */
-  // * Some variables to make the experience better
-  const steps = ["Basics", "Visuals", "Customization", "Delivery"]
-
-  // * Categories get from the service
+  // * Here the plan is to make a multi-step form with the following steps:
+  // *  1. Product basics: Name, description (rich text), price, category, etc.
+  // *  2. Product visuals: Images, models, multiple colors etc.
+  // *  3. Product customization: Colors, Sizes, Custom Texts etc.
+  // *  4. Product delivery: Shipping time, production time, etc.
   const { categories, loading } = useCategories()
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentStep, setCurrentStep] = useState(0)
+  const formRefs = {
+    basics: useRef<BasicsRef>(null),
+    customization: useRef<CustomizationRef>(null),
+  }
 
-  // * Here in the page i want to have the form with the useForm.
-  const method = useForm<z.infer<typeof productBasicInfoSchema>>({
-    resolver: zodResolver(productBasicInfoSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      price: 0,
-      category: "",
+  const steps = [
+    {
+      label: "Basics",
+      component: <Basics ref={formRefs.basics} categories={categories} />,
     },
-  })
+    {
+      label: "Customization",
+      component: <Customization ref={formRefs.customization} />,
+    },
+  ]
+
+  const [currentStep, setCurrentStep] = useState(0)
+  const [product, setProduct] = useState<
+    productBasicsType & productCustomizationType
+  >()
+
+  // * Handle the next step
+  async function handleNextStep() {
+    // Check if the current step is valid and go to the next step
+    const key = steps[currentStep].label.toLowerCase() as keyof typeof formRefs
+    const currentRef = formRefs[key]
+    const data = await currentRef.current?.validate()
+
+    if (data) {
+      setProduct((prev) => ({
+        ...prev,
+        ...data,
+      }))
+      setCurrentStep((prev) => prev + 1)
+
+      // Check if it is the last step and do the submit or go to the next step
+      if (currentStep + 1 === steps.length) handleSubmit()
+    }
+  }
+
+  async function handleSubmit() {
+    if (product === undefined) {
+      toast.error("Ops Seems like sometinhh went wrong")
+      return
+    }
+
+    const { data, error } = await createProduct(product)
+
+    if (error) {
+      toast.error(error)
+    }
+
+    if (data) {
+      console.log(data)
+    }
+  }
 
   if (loading) return <div>Loading...</div>
 
@@ -66,7 +94,7 @@ export default function CreateProductPage() {
       <header className="mb-2 flex h-8 w-full items-center justify-start">
         <h1 className="text-center text-base">
           Step {currentStep + 1} -{" "}
-          <strong className="text-xl">{steps[currentStep]}</strong>
+          <strong className="text-xl">{steps[currentStep].label}</strong>
         </h1>
       </header>
 
@@ -75,102 +103,7 @@ export default function CreateProductPage() {
       {/* Form Body */}
       <div className="mt-4 flex h-full w-full">
         {/* Here we change the form depending on the current step, maybe we can use a custom component for that */}
-        <Form {...method}>
-          <form className="flex h-full w-full flex-col items-start justify-start gap-x-8 gap-y-4 md:flex-row">
-            <div className="flex w-full flex-col items-start justify-start gap-y-4 md:h-full md:w-1/2">
-              <FormField
-                control={method.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Name" className="w-full" />
-                    </FormControl>
-                    <FormDescription>
-                      The name you want to give to your product.
-                    </FormDescription>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={method.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    {/* Here in the price i need to make a custom price component to make it easier to use. */}
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Ex. 100€"
-                        min="0.1"
-                        className="w-full"
-                        type="number"
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      The price you want to give to your product, please use
-                      dots for the decimal point. (50.99€)
-                    </FormDescription>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={method.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Category</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent className="w-full">
-                          {categories.map((category) => {
-                            return (
-                              <SelectItem key={category} value={category}>
-                                {category}
-                              </SelectItem>
-                            )
-                          })}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormDescription>
-                      The category you want to give to your product.
-                    </FormDescription>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex h-full w-full flex-col items-start justify-start md:w-1/2">
-              <FormField
-                control={method.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="h-full w-full">
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <MinimalTiptapEditor
-                        className="h-[calc(100%-80px)]"
-                        onChange={field.onChange}
-                        immediatelyRender={false}
-                        value={field.value}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </form>
-        </Form>
+        {steps[currentStep].component}
       </div>
 
       {/* Form Footer */}
@@ -192,7 +125,7 @@ export default function CreateProductPage() {
           </div>
         </div>
 
-        <Button onClick={method.handleSubmit((data) => console.log(data))}>
+        <Button onClick={handleNextStep}>
           {currentStep + 1 === steps.length ? "Create Product" : "Next Step"}{" "}
           {currentStep + 1 === steps.length ? <Check /> : <ChevronRight />}
         </Button>

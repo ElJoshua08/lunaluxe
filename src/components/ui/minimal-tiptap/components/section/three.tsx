@@ -2,7 +2,7 @@ import * as React from "react"
 import type { Editor } from "@tiptap/react"
 import type { toggleVariants } from "@/components/ui/toggle"
 import type { VariantProps } from "class-variance-authority"
-import { CaretDownIcon, CheckIcon } from "@radix-ui/react-icons"
+import { CaretDownIcon } from "@radix-ui/react-icons"
 import { ToolbarButton } from "../toolbar-button"
 import {
   Popover,
@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useTheme } from "../../hooks/use-theme"
+import { CheckIcon } from "lucide-react"
 
 interface ColorItem {
   cssVar: string
@@ -85,7 +86,7 @@ const MemoizedColorButton = React.memo<{
       <TooltipTrigger asChild>
         <ToggleGroupItem
           tabIndex={0}
-          className="relative size-7 rounded-md p-0"
+          className="relative size-7 rounded-md p-0 flex items-center justify-center"
           value={color.cssVar}
           aria-label={label}
           style={{ backgroundColor: color.cssVar }}
@@ -96,7 +97,8 @@ const MemoizedColorButton = React.memo<{
         >
           {isSelected && (
             <CheckIcon
-              className="absolute inset-0 m-auto size-6"
+              className="size-6"
+              strokeWidth={3}
               style={{ color: inverse }}
             />
           )}
