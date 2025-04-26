@@ -30,9 +30,10 @@ export const Basics = forwardRef<BasicsRef, { categories: string[] }>(
     const form = useForm<z.infer<typeof productBasicsSchema>>({
       resolver: zodResolver(productBasicsSchema),
       defaultValues: {
-        name: "",
-        description: "",
-        category: "",
+        name: "Hello",
+        description: "<p>Hello</p>",
+        category: "Rings",
+        price: 34,
       },
     })
 
@@ -70,15 +71,22 @@ export const Basics = forwardRef<BasicsRef, { categories: string[] }>(
                   {/* Here in the price i need to make a custom price component to make it easier to use. */}
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input
-                      className="w-full"
-                      placeholder="Ex. 100€"
-                      type="number"
-                      min="1"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(event) => field.onChange(+event.target.value)}
-                    />
+                    <div className="relative flex rounded-md">
+                      <Input
+                        className="w-full rounded-e-none  shadow-none"
+                        placeholder="Ex. 100€"
+                        {...field}
+                        value={field.value || ""}
+                        onChange={(event) =>
+                          field.onChange(
+                            parseInt(event.target.value.replace(/[^0-9.]/g, ""))
+                          )
+                        }
+                      />
+                      <span className="-z-10 inline-flex items-center rounded-e-md border-r border-t border-b border-input bg-background px-3 text-sm text-muted-foreground shrink-0">
+                        EUR (€)
+                      </span>
+                    </div>
                   </FormControl>
                   <FormDescription>
                     The price you want to give to your product, please use dots

@@ -1,3 +1,4 @@
+import { colorSchema } from "@/lib/schema/util"
 import { z } from "zod"
 
 export const productBasicsSchema = z.object({
@@ -18,12 +19,33 @@ export const productBasicsSchema = z.object({
 
 export type productBasicsType = z.infer<typeof productBasicsSchema>
 
+export const productVisualSchema = z.object({
+  images: z.array(z.string()).nonempty("This field is required"),
+})
+
 export const productCustomizationSchema = z.object({
-  colors: z.array(z.string()).nonempty("This field is required"),
+  colors: z.array(colorSchema).min(1, "At least one color is required"),
   sizes: z.array(z.string()).nonempty("This field is required"),
   customText: z.object({
     maxCharacters: z.number().min(1).max(1000),
-  })
+  }),
 })
 
-export type productCustomizationType = z.infer<typeof productCustomizationSchema>
+export type productCustomizationType = z.infer<
+  typeof productCustomizationSchema
+>
+
+export const productDeliverySchema = z.object({
+  shippingTime: z.string().nonempty("This field is required"),
+  productionTime: z.string().nonempty("This field is required"),
+  deliveryTime: z.string().nonempty("This field is required"),
+  deliveryCost: z.number().min(0.01, "Delivery cost must be at least 0.01"),
+  returnPolicy: z.string().nonempty("This field is required"),
+  returnTime: z.string().nonempty("This field is required"),
+})
+
+export type productDeliveryType = z.infer<typeof productDeliverySchema>
+
+export type productType = productBasicsType &
+  productCustomizationType &
+  productDeliveryType

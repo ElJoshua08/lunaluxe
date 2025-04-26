@@ -101,7 +101,7 @@ export default function Home() {
             Yours
           </TextAnimate>
 
-          <p className="mt-28 max-w-[50ch] text-balance text-right text-5xl leading-tight">
+          <p className="mt-28 max-w-[50ch] text-balance text-right leading-tight font-italiana font-medium text-6xl">
             Explore a wide selection of unique jewelry and make it your own with
             easy-to-use customization tools.
           </p>

@@ -8,13 +8,11 @@ import {
   Customization,
   CustomizationRef,
 } from "@/app/(admin)/dashboard/products/create/_components/customization"
+import { Delivery, DeliveryRef } from "@/app/(admin)/dashboard/products/create/_components/delivery"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useCategories } from "@/hooks/useCategory"
-import {
-  productBasicsType,
-  productCustomizationType,
-} from "@/lib/schema/product"
+import { productType } from "@/lib/schema/product"
 import { createProduct } from "@/services/product.service"
 import { motion } from "framer-motion"
 import { Check, ChevronRight } from "lucide-react"
@@ -32,50 +30,66 @@ export default function CreateProductPage() {
   const formRefs = {
     basics: useRef<BasicsRef>(null),
     customization: useRef<CustomizationRef>(null),
+    delivery: useRef<DeliveryRef>(null),
   }
 
   const steps = [
     {
+      label: "Customization",
+      ref: formRefs.customization,
+      component: <Customization ref={formRefs.customization} />,
+    },
+    {
       label: "Basics",
+      ref: formRefs.basics,
       component: <Basics ref={formRefs.basics} categories={categories} />,
     },
     {
-      label: "Customization",
-      component: <Customization ref={formRefs.customization} />,
+      label: "Delivery",
+      ref: formRefs.delivery,
+      component: <Delivery ref={formRefs.delivery} />,
     },
+    {
+      label: "Visuals",
+      ref: useRef(null),
+      component: <h1>Visuals</h1>,
+
+    }
   ]
 
   const [currentStep, setCurrentStep] = useState(0)
-  const [product, setProduct] = useState<
-    productBasicsType & productCustomizationType
-  >()
+  const [product, setProduct] = useState<Partial<productType>>()
+
+  console.log("Product is", product)
 
   // * Handle the next step
   async function handleNextStep() {
     // Check if the current step is valid and go to the next step
-    const key = steps[currentStep].label.toLowerCase() as keyof typeof formRefs
-    const currentRef = formRefs[key]
+
+    const currentRef = steps[currentStep].ref
     const data = await currentRef.current?.validate()
 
     if (data) {
+      console.log("data is, ", data)
+
       setProduct((prev) => ({
         ...prev,
         ...data,
       }))
-      setCurrentStep((prev) => prev + 1)
 
-      // Check if it is the last step and do the submit or go to the next step
-      if (currentStep + 1 === steps.length) handleSubmit()
+      setCurrentStep((prev) => prev + 1)
     }
   }
 
   async function handleSubmit() {
     if (product === undefined) {
-      toast.error("Ops Seems like sometinhh went wrong")
+      toast.error(
+        "Seems like some data is missing, please check again before submitting."
+      )
       return
     }
 
-    const { data, error } = await createProduct(product)
+    const { data, error } = await createProduct(product as productType)
 
     if (error) {
       toast.error(error)
@@ -125,7 +139,14 @@ export default function CreateProductPage() {
           </div>
         </div>
 
-        <Button onClick={handleNextStep}>
+        <Button
+          onClick={async () => {
+            if (currentStep + 1 === steps.length) {
+              await handleSubmit()
+            } else {
+              await handleNextStep()
+            }
+          }}>
           {currentStep + 1 === steps.length ? "Create Product" : "Next Step"}{" "}
           {currentStep + 1 === steps.length ? <Check /> : <ChevronRight />}
         </Button>
