@@ -1,12 +1,14 @@
-'use client'
+"use client"
 
-import heroRingImg from '@/../public/images/hero-ring.webp'
-import section2RingImg from '@/../public/images/ring-2.webp'
-import { TextAnimate } from '@/components/ui/text-animate'
-import { ChevronDown } from 'lucide-react'
-import Image from 'next/image'
-import { CTA } from './_components/cta'
-import { SectionSelector } from './_components/section-selector'
+import section2RingImg from "@/../public/images/ring-2.webp"
+import { RingOne } from "@/app/(auth)/components/ring-one"
+import { TextAnimate } from "@/components/ui/text-animate"
+import { Canvas } from "@react-three/fiber"
+import { ChevronDown } from "lucide-react"
+import Image from "next/image"
+import { Suspense } from "react"
+import { CTA } from "./_components/cta"
+import { SectionSelector } from "./_components/section-selector"
 
 export default function Home() {
   return (
@@ -27,21 +29,17 @@ export default function Home() {
             duration={2500}
             as="h1"
             className="text-balance font-italiana text-3xl font-semibold text-foreground md:text-8xl">
-            Exquisite,{' '}
+            Exquisite,{" "}
             <span className="font-bold text-primary dark:text-secondary">
               artisan-crafted
-            </span>{' '}
+            </span>{" "}
             jewelry of unparalleled quality.
           </TextAnimate>
-          <Image
-            src={heroRingImg}
-            alt="Hero Ring"
-            width={820}
-            height={820}
-            quality={100}
-            draggable={false}
-            className="motion-preset-blur-up-lg absolute right-0 top-[155px] -z-10 -translate-y-1/2 translate-x-1/2 select-none"
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Canvas className="z-50" camera={{ position: [0, 0, 15], fov: 50 }}>
+              <RingOne />
+            </Canvas>
+          </Suspense>
         </div>
 
         {/* CTA and Info */}
@@ -64,8 +62,8 @@ export default function Home() {
           strokeWidth={2}
           className="absolute bottom-10 left-1/2 z-0 -translate-x-1/2 animate-bounce cursor-pointer text-foreground animate-duration-[1500ms] animate-infinite animate-ease-in-out"
           onClick={() => {
-            document.getElementById('about-us')?.scrollIntoView({
-              behavior: 'smooth',
+            document.getElementById("about-us")?.scrollIntoView({
+              behavior: "smooth",
             })
           }}
         />
@@ -94,21 +92,21 @@ export default function Home() {
             duration={2500}
             as="h1"
             className="ml-24 self-start text-balance text-left font-italiana text-9xl font-semibold leading-snug">
-            Make It{' '}
+            Make It{" "}
             <span className="bg-primary px-10 py-4 font-bold text-secondary">
               Truly
-            </span>{' '}
+            </span>{" "}
             Yours
           </TextAnimate>
 
-          <p className="mt-28 max-w-[50ch] text-balance text-right leading-tight font-italiana font-medium text-6xl">
+          <p className="mt-28 max-w-[50ch] text-balance text-right font-italiana text-6xl font-medium leading-tight">
             Explore a wide selection of unique jewelry and make it your own with
             easy-to-use customization tools.
           </p>
 
           <div className="-z-20 flex h-40 w-full items-center justify-center bg-secondary">
             <h2 className="text-2xl text-black">
-              Here we put some rings in a row that rotates{' '}
+              Here we put some rings in a row that rotates{" "}
             </h2>
           </div>
         </div>

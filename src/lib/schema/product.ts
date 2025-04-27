@@ -1,4 +1,4 @@
-import { colorSchema } from "@/lib/schema/util"
+import { colorSchema, imageSchema, modelSchema } from "@/lib/schema/util"
 import { z } from "zod"
 
 export const productBasicsSchema = z.object({
@@ -20,8 +20,13 @@ export const productBasicsSchema = z.object({
 export type productBasicsType = z.infer<typeof productBasicsSchema>
 
 export const productVisualSchema = z.object({
-  images: z.array(z.string()).nonempty("This field is required"),
+  images: z.array(imageSchema).nonempty("This field is required"),
+
+  // * The 3D model is recommended but not required
+  model: modelSchema.optional(),
 })
+
+export type productVisualType = z.infer<typeof productVisualSchema>
 
 export const productCustomizationSchema = z.object({
   colors: z.array(colorSchema).min(1, "At least one color is required"),
