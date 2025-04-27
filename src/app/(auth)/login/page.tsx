@@ -1,8 +1,8 @@
-'use client';
+"use client"
 
-import { GoogleIcon } from '@/components/icons/google';
-import { PasswordInput } from '@/components/password-input';
-import { Button } from '@/components/ui/button';
+import { GoogleIcon } from "@/components/icons/google"
+import { PasswordInput } from "@/components/password-input"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -18,48 +18,43 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { loginSchema } from '@/lib/schema/auth';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import { ContinueButton } from '../components/continue-button';
-import { login } from '@/services/user.service';
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Separator } from "@/components/ui/separator"
+import { loginSchema } from "@/lib/schema/auth"
+import { login } from "@/services/user.service"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ChevronRight } from "lucide-react"
+import Link from "next/link"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+import { ContinueButton } from "../_components/continue-button"
 
 export default function LoginPage() {
   // Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
 
   return (
-    <div className="flex flex-row items-stretch justify-center h-full w-full">
-      <section className="bg-background w-1/2 flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center h-full">
+    <div className="flex h-full w-full flex-row items-stretch justify-center">
+      <section className="flex w-1/2 items-center justify-center bg-background">
+        <div className="flex h-full flex-col items-center justify-center">
           <LoginForm />
-          <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
-            <Separator className="grow shrink !bg-foreground/40" />
-            <p className="text-foreground/70 text-lg">OR</p>
-            <Separator className="grow shrink !bg-foreground/40" />
+          <div className="mt-4 flex w-full flex-row items-center justify-center gap-x-2">
+            <Separator className="shrink grow !bg-foreground/40" />
+            <p className="text-lg text-foreground/70">OR</p>
+            <Separator className="shrink grow !bg-foreground/40" />
           </div>
           <div className="mt-4 w-full">
             <ContinueButton
-              icon={
-                <GoogleIcon
-                  size={120}
-                  className="shrink-0 size-[24px]"
-                />
-              }
+              icon={<GoogleIcon size={120} className="size-[24px] shrink-0" />}
               label="Continue with Google"
             />
           </div>
         </div>
       </section>
-      <section className="bg-primary w-1/2 flex items-center justify-center px-6">
-        <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
+      <section className="flex w-1/2 items-center justify-center bg-primary px-6">
+        <h1 className="text-balance text-center font-italianno text-9xl font-medium text-white">
           Elegance is the only beauty that never fades.
         </h1>
       </section>
@@ -68,33 +63,28 @@ export default function LoginPage() {
 
       <Link
         href="/register"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-12 p-[0.8rem]  bg-white 
-       hover:scale-110 transition-all group shadow-md shadow-black/50 flex items-center justify-center"
-      >
-        <ChevronRight
-          className="text-black size-32 "
-          size={48}
-        />
+        className="group absolute left-1/2 top-1/2 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white p-[0.8rem] shadow-md shadow-black/50 transition-all hover:scale-110">
+        <ChevronRight className="size-32 text-black" size={48} />
       </Link>
     </div>
-  );
+  )
 }
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
-  });
+  })
 
   async function onSubmit(data: z.infer<typeof loginSchema>) {
-    const error = await login(data);
+    const error = await login(data)
 
     if (error) {
-      toast.error(error);
-      return;
+      toast.error(error)
+      return
     }
   }
 
@@ -104,7 +94,7 @@ const LoginForm = () => {
         <CardTitle className="text-xl">Welcome to lunaluxe</CardTitle>
         <CardDescription>Please login before continuing. </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-8 mb-6">
+      <CardContent className="mb-6 space-y-8">
         <Form {...form}>
           <FormField
             control={form.control}
@@ -113,10 +103,7 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Email"
-                  />
+                  <Input {...field} placeholder="Email" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -138,21 +125,15 @@ const LoginForm = () => {
         </Form>
       </CardContent>
       <CardFooter className="flex items-end justify-between gap-x-16">
-        <Link href={'/forgot-password'}>
-          <Label
-            variant="link"
-            size="sm"
-          >
+        <Link href={"/forgot-password"}>
+          <Label variant="link" size="sm">
             Forgot your password?
           </Label>
         </Link>
-        <Button
-          onClick={form.handleSubmit(onSubmit)}
-          loadOnClick
-        >
+        <Button onClick={form.handleSubmit(onSubmit)} loadOnClick>
           Login
         </Button>
       </CardFooter>
     </Card>
-  );
-};
+  )
+}

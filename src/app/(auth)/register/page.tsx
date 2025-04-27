@@ -1,8 +1,8 @@
-'use client';
+"use client"
 
-import { GoogleIcon } from '@/components/icons/google';
-import { PasswordInput } from '@/components/password-input';
-import { Button } from '@/components/ui/button';
+import { GoogleIcon } from "@/components/icons/google"
+import { PasswordInput } from "@/components/password-input"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -18,92 +18,84 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-import { registerSchema } from '@/lib/schema/auth';
-import { register, resendEmail } from '@/services/user.service';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import { ContinueButton } from '../components/continue-button';
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+import { registerSchema } from "@/lib/schema/auth"
+import { register, resendEmail } from "@/services/user.service"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ChevronRight } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+import { ContinueButton } from "../_components/continue-button"
 
 export default function RegisterPage() {
   // * Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const [isVerifying, setIsVerifying] = useState<boolean>(false);
-  const [email, setEmail] = useState<string | undefined>();
+  const [isVerifying, setIsVerifying] = useState<boolean>(false)
+  const [email, setEmail] = useState<string | undefined>()
 
   async function onSuccess(email: string) {
-    setEmail(email);
-    setIsVerifying(true);
+    setEmail(email)
+    setIsVerifying(true)
 
     localStorage.setItem(
-      'emailVerification',
+      "emailVerification",
       JSON.stringify({ isVerifying: true })
-    );
+    )
   }
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === "visible") {
         // * Here we get the variables from localstorage and shit and giggles.
 
         const { isVerified, isVerifying, email } = JSON.parse(
-          localStorage.getItem('emailVerification') || '{}'
-        );
+          localStorage.getItem("emailVerification") || "{}"
+        )
 
         if (isVerifying && email) {
-          setIsVerifying(isVerifying);
-          setEmail(email);
+          setIsVerifying(isVerifying)
+          setEmail(email)
         }
 
         if (isVerified) {
-          router.push('/');
+          router.push("/")
         }
       }
-    };
+    }
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange)
 
     return () =>
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [isVerifying, router]);
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+  }, [isVerifying, router])
 
   return (
-    <div className="flex flex-row justify-center lg:items-stretch w-full h-full">
-      <SuccessCard
-        isVerifying={isVerifying}
-        email={email}
-      />
-      <section className="bg-primary w-1/2 items-center justify-center px-6 hidden lg:flex">
-        <h1 className="font-italianno font-medium text-9xl text-center text-balance text-white">
+    <div className="flex h-full w-full flex-row justify-center lg:items-stretch">
+      <SuccessCard isVerifying={isVerifying} email={email} />
+      <section className="hidden w-1/2 items-center justify-center bg-primary px-6 lg:flex">
+        <h1 className="text-balance text-center font-italianno text-9xl font-medium text-white">
           Because excellence is never accidental.
         </h1>
       </section>
-      <section className="bg-background w-1/2 flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center h-full">
+      <section className="flex w-1/2 items-center justify-center bg-background">
+        <div className="flex h-full flex-col items-center justify-center">
           <RegisterForm onSuccess={(email) => onSuccess(email)} />
-          <div className="flex flex-row items-center justify-center w-full mt-4 gap-x-2">
-            <Separator className="grow shrink !bg-foreground/40" />
-            <p className="text-foreground/70 text-lg">OR</p>
-            <Separator className="grow shrink !bg-foreground/40" />
+          <div className="mt-4 flex w-full flex-row items-center justify-center gap-x-2">
+            <Separator className="shrink grow !bg-foreground/40" />
+            <p className="text-lg text-foreground/70">OR</p>
+            <Separator className="shrink grow !bg-foreground/40" />
           </div>
           <div className="mt-4 w-full">
             <ContinueButton
-              icon={
-                <GoogleIcon
-                  size={120}
-                  className="shrink-0 size-[24px]"
-                />
-              }
+              icon={<GoogleIcon size={120} className="size-[24px] shrink-0" />}
               label="Continue with Google"
             />
           </div>
@@ -114,43 +106,38 @@ export default function RegisterPage() {
 
       <Link
         href="/login"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full size-12 p-[0.8rem] bg-white 
-       hover:scale-110 transition-all group shadow-md shadow-black/50 items-center justify-center hidden lg:flex"
-      >
-        <ChevronRight
-          className="text-black size-32 rotate-180 "
-          size={48}
-        />
+        className="group absolute left-1/2 top-1/2 hidden size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white p-[0.8rem] shadow-md shadow-black/50 transition-all hover:scale-110 lg:flex">
+        <ChevronRight className="size-32 rotate-180 text-black" size={48} />
       </Link>
     </div>
-  );
+  )
 }
 
 const RegisterForm = ({
   onSuccess,
 }: {
-  onSuccess: (email: string) => void;
+  onSuccess: (email: string) => void
 }) => {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
-  });
+  })
 
   async function onSubmit(data: z.infer<typeof registerSchema>) {
-    const error = await register(data);
+    const error = await register(data)
 
     if (error) {
-      toast.error(error);
-      return;
+      toast.error(error)
+      return
     }
 
-    onSuccess(data.email);
+    onSuccess(data.email)
   }
 
   return (
@@ -159,7 +146,7 @@ const RegisterForm = ({
         <CardTitle className="text-xl">Welcome to lunaluxe</CardTitle>
         <CardDescription>Please regiser before continuing.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 mb-6">
+      <CardContent className="mb-6 space-y-4">
         <Form {...form}>
           <div className="flex flex-row gap-x-4">
             <FormField
@@ -169,10 +156,7 @@ const RegisterForm = ({
                 <FormItem>
                   <FormLabel>First name</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Name"
-                    />
+                    <Input {...field} placeholder="Name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -185,10 +169,7 @@ const RegisterForm = ({
                 <FormItem>
                   <FormLabel>Last name</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Name"
-                    />
+                    <Input {...field} placeholder="Name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -203,10 +184,7 @@ const RegisterForm = ({
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Email"
-                  />
+                  <Input {...field} placeholder="Email" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -232,10 +210,7 @@ const RegisterForm = ({
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <PasswordInput
-                    {...field}
-                    placeholder="Confirm Password"
-                  />
+                  <PasswordInput {...field} placeholder="Confirm Password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -247,31 +222,30 @@ const RegisterForm = ({
         <Button
           onClick={form.handleSubmit(onSubmit)}
           className="w-full"
-          loadOnClick
-        >
+          loadOnClick>
           Register
         </Button>
       </CardFooter>
     </Card>
-  );
-};
+  )
+}
 
 const SuccessCard = ({
   isVerifying,
   email,
 }: {
-  isVerifying: boolean;
-  email?: string;
+  isVerifying: boolean
+  email?: string
 }) => {
-  if (!isVerifying || !email) return null;
+  if (!isVerifying || !email) return null
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50">
+    <div className="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center">
       {/* // The overlay */}
-      <div className="absolute top-0 left-0 w-full h-full bg-black/80 -z-10 animate-fade animate-duration-200 animate-once animate-fill-forwards" />
+      <div className="absolute left-0 top-0 -z-10 h-full w-full animate-fade bg-black/80 animate-duration-200 animate-fill-forwards animate-once" />
 
       {/* // The dialog */}
-      <Card className="animate-fade-up animate-delay-150 animate-duration-300 animate-once animate-fill-forwards max-w-md">
+      <Card className="max-w-md animate-fade-up animate-delay-150 animate-duration-300 animate-fill-forwards animate-once">
         <CardHeader>
           <CardTitle className="text-3xl">Welcome to LunaLuxe!</CardTitle>
           <CardDescription>
@@ -281,7 +255,7 @@ const SuccessCard = ({
         </CardHeader>
 
         <CardContent>
-          <p className="text-sm text-muted-foreground text-left">
+          <p className="text-left text-sm text-muted-foreground">
             Didn’t receive the email? Check your spam folder or request a new
             one below.
           </p>
@@ -292,12 +266,11 @@ const SuccessCard = ({
             variant="default"
             className="w-full"
             onClick={async () => resendEmail(email)}
-            loadOnClick
-          >
+            loadOnClick>
             Resend Email
           </Button>
         </CardFooter>
       </Card>
     </div>
-  );
-};
+  )
+}
