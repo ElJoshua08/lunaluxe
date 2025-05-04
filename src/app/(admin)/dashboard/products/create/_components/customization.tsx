@@ -23,6 +23,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -33,7 +34,12 @@ import {
 } from "@/lib/schema/product";
 import { colorSchema, colorType } from "@/lib/schema/util";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forwardRef, HTMLAttributes, useImperativeHandle, useState } from "react";
+import {
+  forwardRef,
+  HTMLAttributes,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 
 export type CustomizationRef = {
@@ -60,18 +66,28 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
   }));
 
   const colors = form.watch("colors");
-
-  console.log("Colors are", colors);
+  const sizes = form.watch("sizes");
 
   return (
     <Form {...form}>
-      <div className="w-full h-full flex flex-col overflow-y-scroll md:overflow-y-hidden md:flex-row gap-4">
+      <div className="flex h-full w-full flex-col gap-4 overflow-y-scroll md:flex-row md:overflow-y-hidden">
         <Card className="mb-2 flex w-1/3 flex-col">
           <CardHeader>
-            <CardTitle>Colors</CardTitle>
+            <FormField
+              name="colors"
+              control={form.control}
+              render={({}) => (
+                <CardTitle className="inline-flex items-center gap-x-2 text-lg">
+                  Colors
+                  <Separator orientation="vertical" />
+                  <FormMessage className="inline-block" />
+                </CardTitle>
+              )}
+            />
           </CardHeader>
+          <Separator className="" />
           <CardContent className="flex grow flex-col items-start">
-            <div className="flex h-full grow flex-row flex-wrap gap-4 py-6">
+            <div className="flex h-full w-full grow flex-row flex-wrap gap-4 py-6">
               {colors.length > 0 ? (
                 colors.map((color, index) => (
                   <div
@@ -81,9 +97,11 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
                   />
                 ))
               ) : (
-                <p className="text-sm text-foreground/50">
-                  No colors added yet
-                </p>
+                <div className="flex items-center justify-center w-full">
+                  <p className="text-lg text-foreground/75">
+                    No colors added yet
+                  </p>
+                </div>
               )}
             </div>
 
@@ -119,8 +137,56 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
             />
           </CardFooter>
         </Card>
-      </div>
 
+        <Card className="mb-2 flex w-1/3 flex-col">
+          <CardHeader>
+            <FormField
+              name="sizes"
+              control={form.control}
+              render={({}) => (
+                <CardTitle className="inline-flex items-center gap-x-2">
+                  Sizes
+                  <Separator orientation="vertical" />
+                  <FormMessage className="inline-block" />
+                </CardTitle>
+              )}
+            />
+          </CardHeader>
+          <CardContent className="flex grow flex-col items-start">
+            <div className="flex h-full grow flex-row flex-wrap gap-4 py-6">
+              {sizes.length > 0 ? (
+                sizes.map((size, index) => <div key={index}>{size}</div>)
+              ) : (
+                <p className="text-sm text-foreground/50">No sizes added yet</p>
+              )}
+            </div>
+
+            <FormField
+              control={form.control}
+              name="useSizesInModel"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      Use Sizes in Model
+                    </FormLabel>
+                    <FormDescription>
+                      Change the size of the model (if provided)
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </CardContent>
+          <CardFooter className="flex w-full items-center justify-end"></CardFooter>
+        </Card>
+      </div>
     </Form>
   );
 });

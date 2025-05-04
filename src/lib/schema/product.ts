@@ -30,11 +30,12 @@ export type productVisualType = z.infer<typeof productVisualSchema>
 
 export const productCustomizationSchema = z.object({
   colors: z.array(colorSchema).min(1, "At least one color is required"),
-  sizes: z.array(z.string()).nonempty("This field is required"),
+  sizes: z.array(z.string()).min(1, "At least one size is required"),
   customText: z.object({
     maxCharacters: z.number().min(1).max(1000),
   }),
-  useColorsInModel: z.boolean().default(false)
+  useColorsInModel: z.boolean().default(false),
+  useSizesInModel: z.boolean().default(false),
 })
 
 export type productCustomizationType = z.infer<

@@ -1,12 +1,11 @@
-"use client"
+"use client";
 
-import section2RingImg from "@/../public/images/ring-2.webp"
-import { SceneOne } from "@/app/(auth)/_components/scene-one"
-import { TextAnimate } from "@/components/ui/text-animate"
-import { ChevronDown } from "lucide-react"
-import Image from "next/image"
-import { CTA } from "./_components/cta"
-import { SectionSelector } from "./_components/section-selector"
+import { TextAnimate } from "@/components/ui/text-animate";
+
+import { ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { CTA } from "./_components/cta";
+import { SectionSelector } from "./_components/section-selector";
 
 export default function Home() {
   return (
@@ -17,25 +16,30 @@ export default function Home() {
         selectorClassname="h-8 md:h-3"
       />
 
-      {/* First Section */}
       <section id="hero" className="h-full w-full shrink-0 grow">
         {/* Hero Section */}
-        <div className="relative -z-[5] mt-20 flex w-full flex-row items-center justify-start pl-16 gap-x-8 bg-secondary py-8 dark:bg-primary">
+        <div className="relative -z-[5] mt-20 flex w-full flex-row items-center justify-center gap-x-8 bg-secondary px-32 py-8 dark:bg-primary">
           <TextAnimate
             by="word"
             animation="blurInUp"
             duration={2500}
             as="h1"
-            className="max-w-[20ch] shrink-0 text-balance font-italiana text-3xl font-semibold text-foreground md:text-8xl">
+            className="text-balance font-italiana text-3xl font-semibold text-foreground md:text-8xl">
             Exquisite,{" "}
             <span className="font-bold text-primary dark:text-secondary">
               artisan-crafted
             </span>{" "}
             jewelry of unparalleled quality.
           </TextAnimate>
-          <div className="absolute -right-10 min-h-[1000px] min-w-[700px] bg-red-500 flex items-center justify-center">
-            <SceneOne />
-          </div> 
+          <Image
+            src="/images/hero-ring.webp"
+            alt="Hero Ring"
+            width={820}
+            height={820}
+            quality={100}
+            draggable={false}
+            className="animate-fade-up absolute -right-64 -top-96 -z-10  select-none"
+          />
         </div>
 
         {/* CTA and Info */}
@@ -60,7 +64,7 @@ export default function Home() {
           onClick={() => {
             document.getElementById("about-us")?.scrollIntoView({
               behavior: "smooth",
-            })
+            });
           }}
         />
       </section>
@@ -71,7 +75,7 @@ export default function Home() {
         id="about-us">
         {/* Section Ring */}
         <Image
-          src={section2RingImg}
+          src="/images/ring-2.webp"
           alt="Section Ring"
           width={1050}
           height={1050}
@@ -108,5 +112,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }
