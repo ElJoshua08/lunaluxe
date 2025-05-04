@@ -9,6 +9,7 @@ import {
   CustomizationRef,
 } from "@/app/(admin)/dashboard/products/create/_components/customization"
 import { Delivery, DeliveryRef } from "@/app/(admin)/dashboard/products/create/_components/delivery"
+import { Loading } from "@/components/loading"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useCategories } from "@/hooks/useCategory"
@@ -100,7 +101,7 @@ export default function CreateProductPage() {
     }
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <Loading size="fullscreen" />
 
   return (
     <main className="flex h-full w-full flex-col items-start justify-start p-8">

@@ -1,5 +1,6 @@
 'use client';
 
+import { Loading } from '@/components/loading';
 import {
   Card,
   CardContent,
@@ -79,16 +80,12 @@ const VerifyEmailPage = () => {
   }
 
   // * This is the default state for when the verification is not complete
-  return <LoadingFallBack />;
+  return <Loading />;
 };
 
 // * This wrapper is because of the useSearchParams hook
 export default function Wrapper() {
   return (
-    <Suspense fallback={<LoadingFallBack />}>{<VerifyEmailPage />}</Suspense>
+    <Suspense fallback={<Loading />}>{<VerifyEmailPage />}</Suspense>
   );
 }
-
-const LoadingFallBack = () => {
-  return <div>Loading Fallback...</div>;
-};

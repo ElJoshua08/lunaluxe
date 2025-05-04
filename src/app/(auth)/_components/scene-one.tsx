@@ -9,9 +9,14 @@ export const SceneOne = ({ className }: { className?: string }) => {
   return (
     <Canvas
       className={cn("", className)}
-      camera={{ position: [0, 0, 5], fov: 60, scale: 10 }}>
-      <ambientLight intensity={10} />
-      <directionalLight position={[10, 10, 5]} intensity={20} />
+      style={
+        {
+          height: "600px",
+        }
+      }
+      camera={{ position: [0, 0, 3], fov: 60, scale: 10 }}>
+      <ambientLight intensity={25} />
+      <directionalLight position={[10, 10, 5]} intensity={50} />
       <Suspense fallback={null}>
         <RingOne />
       </Suspense>

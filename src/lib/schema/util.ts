@@ -15,11 +15,18 @@ export const modelSchema = z.object({
 export const colorSchema = z.object({
   name: z.string().nonempty("A name is required"),
   // * Value should always be a hex color code
-  value: z.string().nonempty("A value is required"),
+  value: z
+    .string()
+    .nonempty("A value is required")
+    .refine((value) => {
+      return /^#([0-9a-f]{3}){1,2}$/i.test(value)
+    }, "Invalid hex color code"),
 
   // * Image is recommended but not required
   image: imageSchema.optional(),
 })
+
+export type colorType = z.infer<typeof colorSchema>
 
 export const sizeSchema = z.object({
   // * The text to be displayed

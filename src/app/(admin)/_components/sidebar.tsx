@@ -1,63 +1,59 @@
-'use client';
+"use client"
 
-import { buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
-import { DropdownMenuItemProps } from '@radix-ui/react-dropdown-menu';
-import { User } from '@supabase/supabase-js';
+} from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
+import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu"
+import { User } from "@supabase/supabase-js"
 import {
   ChevronsUpDownIcon,
   MoonIcon,
   SettingsIcon,
   SunIcon,
   UserIcon,
-} from 'lucide-react';
-import { useTheme } from 'next-themes';
-import Link from 'next/link';
+} from "lucide-react"
+import { useTheme } from "next-themes"
+import Link from "next/link"
 
 export interface SidebarProps {
-  user: User;
+  user: User
 }
 
 export const Sidebar = ({ user }: SidebarProps) => {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme()
 
   return (
-    <nav className="w-72 shrink-0 h-full border-r border-border flex flex-col justify-between ">
+    <nav className="flex h-full w-72 shrink-0 flex-col justify-between border-r border-border">
       {/* Admin Account */}
-      <header className="flex items-center justify-center w-full p-4 border-b border-border">
+      <header className="flex w-full items-center justify-center border-b border-border p-4">
         <DropdownMenu>
-          <DropdownMenuTrigger className="w-full ">
-            <div className="w-full rounded-lg bg-foreground/10  flex flex-row gap-y-4 items-center justify-start gap-x-4">
-              <div className="bg-foreground/20 shrink-0 rounded-l-lg size-12 flex items-center justify-center text-xl font-montserrat">
-                {user?.user_metadata?.display_name?.[0] ?? '?'}
+          <DropdownMenuTrigger className="w-full">
+            <div className="flex w-full flex-row items-center justify-start gap-x-4 gap-y-4 rounded-lg bg-foreground/10">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-l-lg bg-foreground/20 font-montserrat text-xl">
+                {user?.user_metadata?.display_name?.[0] ?? "?"}
               </div>
-              <p className="font-montserrat inline-block w-full text-start capitalize">
-                {user?.user_metadata?.role ?? 'Admin'}
+              <p className="inline-block w-full text-start font-montserrat capitalize">
+                {user?.user_metadata?.role ?? "Admin"}
               </p>
-              <ChevronsUpDownIcon className="size-4 text-foreground/70 mr-4 shrink-0 " />
+              <ChevronsUpDownIcon className="mr-4 size-4 shrink-0 text-foreground/70" />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-64 p-2">
             <DropdownMenuGroup>
-              <CustomDropdownMenuItem
-                Icon={UserIcon}
-                href="/dashboard/account"
-              >
+              <AdminDropdownItem Icon={UserIcon} href="/dashboard/account">
                 Account
-              </CustomDropdownMenuItem>
-              <CustomDropdownMenuItem
-                Icon={theme === 'dark' ? MoonIcon : SunIcon}
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              >
+              </AdminDropdownItem>
+              <AdminDropdownItem
+                Icon={theme === "dark" ? MoonIcon : SunIcon}
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
                 Toggle Theme
-              </CustomDropdownMenuItem>
+              </AdminDropdownItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -67,52 +63,50 @@ export const Sidebar = ({ user }: SidebarProps) => {
       <ul></ul>
 
       {/* Settings */}
-      <footer className="flex items-center justify-center w-full p-4 border-t border-border">
+      <footer className="flex w-full items-center justify-center border-t border-border p-4">
         <Link
           href="/dashboard/settings"
           className={cn(
-            'w-full',
+            "w-full",
             buttonVariants({
-              variant: 'outline',
+              variant: "outline",
             })
-          )}
-        >
+          )}>
           <SettingsIcon />
           Settings
         </Link>
       </footer>
     </nav>
-  );
-};
-
-interface CustomDropdownMenuItemProps extends DropdownMenuItemProps {
-  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
-  children: React.ReactNode;
-  href?: string;
+  )
 }
 
-const CustomDropdownMenuItem = ({
+interface AdminDropdownItemProps extends DropdownMenuItemProps {
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>
+  children: React.ReactNode
+  href?: string
+}
+
+const AdminDropdownItem = ({
   Icon,
   children,
   href,
   ...props
-}: CustomDropdownMenuItemProps) => {
+}: AdminDropdownItemProps) => {
   return (
     <DropdownMenuItem {...props}>
       {href ? (
         <Link
           href={href}
-          className="flex flex-row items-center justify-start gap-x-2  h-10 cursor-pointer"
-        >
+          className="flex h-6 cursor-pointer flex-row items-center justify-start gap-x-2">
           <Icon className="size-5 text-foreground/70" />
           {children}
         </Link>
       ) : (
-        <div className="flex flex-row items-center justify-start gap-x-2  h-10 cursor-pointer">
+        <div className="flex h-6 cursor-pointer flex-row items-center justify-start gap-x-2">
           <Icon className="size-5 text-foreground/70" />
           {children}
         </div>
       )}
     </DropdownMenuItem>
-  );
-};
+  )
+}

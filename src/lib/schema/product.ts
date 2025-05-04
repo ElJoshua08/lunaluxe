@@ -34,6 +34,7 @@ export const productCustomizationSchema = z.object({
   customText: z.object({
     maxCharacters: z.number().min(1).max(1000),
   }),
+  useColorsInModel: z.boolean().default(false)
 })
 
 export type productCustomizationType = z.infer<

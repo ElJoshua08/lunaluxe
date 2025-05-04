@@ -29,6 +29,10 @@ const italianno = Italianno({
 export const metadata: Metadata = {
   title: "Lunaluxe",
   description: "Buy top quality jewelry handcrafted by artisans.",
+  icons: {
+    icon: "/logo.svg",
+    
+  }
 }
 
 export default function RootLayout({
