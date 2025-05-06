@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { loginSchema, registerSchema } from "@/lib/schema/auth";
-import { createServerClient } from "@/lib/utils/supabase/server";
+import { createClient, createServerClient } from "@/lib/utils/supabase/server";
 import {
   Provider,
   SignUpWithPasswordCredentials,
@@ -19,7 +19,7 @@ export async function getUser(): Promise<{
   user?: User;
   error?: Error;
 }> {
-  const supabase = await createServerClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase.auth.getUser();
 
@@ -62,10 +62,6 @@ export async function loginWithProvider(
     provider: provider,
     options: {
       redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/callback`,
-      queryParams: {
-        access_type: "offline",
-        prompt: "consent",
-      },
     },
   });
 
