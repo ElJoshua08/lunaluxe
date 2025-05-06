@@ -95,8 +95,9 @@ export default function RegisterPage() {
           </div>
           <div className="mt-4 w-full">
             <ContinueButton
-              icon={<GoogleIcon size={120} className="size-[24px] shrink-0" />}
               label="Continue with Google"
+              provider="google"
+              icon={<GoogleIcon size={120} className="size-[24px] shrink-0" />}
             />
           </div>
         </div>
