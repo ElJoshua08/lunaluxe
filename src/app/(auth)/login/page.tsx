@@ -48,8 +48,8 @@ export default function LoginPage() {
           <div className="mt-4 w-full">
             <ContinueButton
               label="Continue with Google"
-              icon={<GoogleIcon size={120} className="size-[24px] shrink-0" />}
               provider="google"
+              icon={<GoogleIcon size={120} className="size-[24px] shrink-0" />}
             />
           </div>
         </div>
