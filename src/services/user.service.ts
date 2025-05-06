@@ -47,19 +47,35 @@ export async function login(data: z.infer<typeof loginSchema>) {
   redirect("/");
 }
 
-export async function loginWithProvider(provider: Provider) {
+export async function loginWithProvider(
+  provider: Provider
+): Promise<{ error?: string }> {
   const supabase = await createServerClient();
+
+  console.log("Logging in with provider: ", provider);
+  console.log(
+    "Redirecting to: ",
+    `${process.env.NEXT_PUBLIC_SITE_URL}/callback`
+  );
 
   const { error } = await supabase.auth.signInWithOAuth({
     provider: provider,
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/`,
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/callback`,
+      queryParams: {
+        access_type: "offline",
+        prompt: "consent",
+      },
     },
   });
 
+  console.log("Now you should already be redirected to the provider");
+
   if (error) {
-    return error.message;
+    return { error: error.message };
   }
+
+  return {};
 }
 
 export async function register(data: z.infer<typeof registerSchema>) {
