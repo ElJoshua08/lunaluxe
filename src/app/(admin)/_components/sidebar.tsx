@@ -13,6 +13,7 @@ import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu"
 import { User } from "@supabase/supabase-js"
 import {
   ChevronsUpDownIcon,
+  LogOutIcon,
   MoonIcon,
   SettingsIcon,
   SunIcon,
@@ -55,6 +56,13 @@ export const Sidebar = ({ user }: SidebarProps) => {
                 Toggle Theme
               </AdminDropdownItem>
             </DropdownMenuGroup>
+            <DropdownMenuGroup className="mt-2">
+              <AdminDropdownItem
+                Icon={LogOutIcon}
+                onClick={async () => { console.log("Olas") }}>
+                Log Out
+              </AdminDropdownItem>
+              </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
@@ -82,7 +90,7 @@ export const Sidebar = ({ user }: SidebarProps) => {
 
 interface AdminDropdownItemProps extends DropdownMenuItemProps {
   Icon: React.FC<React.SVGProps<SVGSVGElement>>
-  children: React.ReactNode
+  children?: React.ReactNode
   href?: string
 }
 
@@ -97,13 +105,13 @@ const AdminDropdownItem = ({
       {href ? (
         <Link
           href={href}
-          className="flex h-6 cursor-pointer flex-row items-center justify-start gap-x-2">
-          <Icon className="size-5 text-foreground/70" />
+          className="flex h-6 cursor-pointer flex-row items-center justify-start gap-x-3">
+          <Icon className="size-5 text-foreground" />
           {children}
         </Link>
       ) : (
-        <div className="flex h-6 cursor-pointer flex-row items-center justify-start gap-x-2">
-          <Icon className="size-5 text-foreground/70" />
+        <div className="flex h-6 cursor-pointer flex-row items-center justify-start gap-x-3">
+          <Icon className="size-5 text-foreground" />
           {children}
         </div>
       )}

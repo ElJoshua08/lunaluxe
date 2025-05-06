@@ -1,18 +1,19 @@
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-import { loginSchema, registerSchema } from '@/lib/schema/auth';
-import { createServerClient } from '@/lib/utils/supabase/server';
+import { loginSchema, registerSchema } from "@/lib/schema/auth";
+import { createServerClient } from "@/lib/utils/supabase/server";
 import {
+  Provider,
   SignUpWithPasswordCredentials,
   User,
   VerifyOtpParams,
-} from '@supabase/supabase-js';
-import { headers } from 'next/headers';
+} from "@supabase/supabase-js";
+import { headers } from "next/headers";
 
-import { z } from 'zod';
+import { z } from "zod";
 
 export async function getUser(): Promise<{
   user?: User;
@@ -34,7 +35,7 @@ export async function getUser(): Promise<{
 }
 
 export async function login(data: z.infer<typeof loginSchema>) {
-  const supabase = await createServerClient()
+  const supabase = await createServerClient();
 
   const { error } = await supabase.auth.signInWithPassword(data);
 
@@ -42,13 +43,28 @@ export async function login(data: z.infer<typeof loginSchema>) {
     return error.message;
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/');
+  revalidatePath("/", "layout");
+  redirect("/");
+}
+
+export async function loginWithProvider(provider: Provider) {
+  const supabase = await createServerClient();
+
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: provider,
+    options: {
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/`,
+    },
+  });
+
+  if (error) {
+    return error.message;
+  }
 }
 
 export async function register(data: z.infer<typeof registerSchema>) {
-  const supabase = await createServerClient()
-  const origin = (await headers()).get('origin');
+  const supabase = await createServerClient();
+  const origin = (await headers()).get("origin");
 
   const { error: authError } = await supabase.auth.signUp({
     email: data.email,
@@ -66,7 +82,7 @@ export async function register(data: z.infer<typeof registerSchema>) {
     return authError.message;
   }
 
-  const { error: dbError } = await supabase.from('users').insert([
+  const { error: dbError } = await supabase.from("users").insert([
     {
       first_name: data.firstName,
       last_name: data.lastName,
@@ -80,11 +96,11 @@ export async function register(data: z.infer<typeof registerSchema>) {
 }
 
 export async function resendEmail(email: string) {
-  const supabase = await createServerClient()
-  const origin = (await headers()).get('origin');
+  const supabase = await createServerClient();
+  const origin = (await headers()).get("origin");
 
   const { error } = await supabase.auth.resend({
-    type: 'signup',
+    type: "signup",
     email: email,
     options: {
       emailRedirectTo: `${origin}/verify-email`,
@@ -97,14 +113,27 @@ export async function resendEmail(email: string) {
 }
 
 export async function verifyEmail(tokenHash: string) {
-  const supabase = await createServerClient()
+  const supabase = await createServerClient();
 
   const { error } = await supabase.auth.verifyOtp({
-    type: 'email',
+    type: "email",
     token_hash: tokenHash,
   } as VerifyOtpParams);
 
   if (error) {
     return error.message;
   }
+}
+
+export async function logout() {
+  const supabase = await createServerClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    return error.message;
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/");
 }
