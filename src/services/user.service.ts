@@ -149,3 +149,17 @@ export async function logout() {
   revalidatePath("/", "layout");
   redirect("/");
 }
+
+export async function sendPasswordRecoveryEmail(email: string) {
+  const supabase = await createServerClient();
+
+  const { error, data } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
+  });
+
+  if (error) {
+    return { error: error.message};
+  }
+
+  return {}
+}

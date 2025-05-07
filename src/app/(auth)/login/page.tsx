@@ -36,8 +36,8 @@ export default function LoginPage() {
   // Here the idea is to divide the screen in the middle …, having the maximun contrast, in one half whe would put the login form, and in the other, we will put some phrase and image behind to make it look 🌟Luxurious🌟
 
   return (
-    <div className="flex h-full w-full flex-row items-stretch justify-center">
-      <section className="flex w-1/2 items-center justify-center bg-background">
+    <div className="flex h-full w-full flex-row items-stretch justify-between">
+      <section className="flex w-1/2 items-center justify-center bg-background grow">
         <div className="flex h-full flex-col items-center justify-center">
           <LoginForm />
           <div className="mt-4 flex w-full flex-row items-center justify-center gap-x-2">
@@ -54,7 +54,7 @@ export default function LoginPage() {
           </div>
         </div>
       </section>
-      <section className="flex w-1/2 items-center justify-center bg-primary px-6 relative overflow-y-clip">
+      <section className="flex w-[calc(50%_-_35px)] items-center justify-center bg-primary px-6 relative overflow-y-clip right-0">
         <div className="absolute left-0 -rotate-2 top-0 h-[calc(120vh)] -translate-y-12 bg-primary shadow-lg -z-5 -translate-x-1/2 w-16 shadow-primary/50 hidden md:block" />
         <h1 className="text-balance text-center font-italianno text-9xl font-medium text-white">
           Elegance is the only beauty that never fades.

@@ -37,3 +37,9 @@ export const verifySchema = z.object({
     .min(6, 'OTP must be 6 digits')
     .max(6, 'OTP must be 6 digits'),
 })
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().nonempty("This field is required").email("Field should contain a valid email")
+})
+
+export type forgotPasswordType = z.infer<typeof forgotPasswordSchema>
