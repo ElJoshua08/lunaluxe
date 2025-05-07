@@ -97,7 +97,7 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
                   />
                 ))
               ) : (
-                <div className="flex items-center justify-center w-full">
+                <div className="flex w-full items-center justify-center">
                   <p className="text-lg text-foreground/75">
                     No colors added yet
                   </p>

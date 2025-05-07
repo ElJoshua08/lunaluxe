@@ -1,32 +1,36 @@
-"use client"
+"use client";
 
-import { buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
-import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu"
-import { User } from "@supabase/supabase-js"
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { logout } from "@/services/user.service";
+import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
+import { User } from "@supabase/supabase-js";
+import { cva, VariantProps } from "class-variance-authority";
 import {
   ChevronsUpDownIcon,
+  LogOutIcon,
   MoonIcon,
   SettingsIcon,
   SunIcon,
   UserIcon,
-} from "lucide-react"
-import { useTheme } from "next-themes"
-import Link from "next/link"
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
 
 export interface SidebarProps {
-  user: User
+  user: User;
 }
 
 export const Sidebar = ({ user }: SidebarProps) => {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
 
   return (
     <nav className="flex h-full w-72 shrink-0 flex-col justify-between border-r border-border">
@@ -44,15 +48,30 @@ export const Sidebar = ({ user }: SidebarProps) => {
               <ChevronsUpDownIcon className="mr-4 size-4 shrink-0 text-foreground/70" />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-64 p-2">
-            <DropdownMenuGroup>
-              <AdminDropdownItem Icon={UserIcon} href="/dashboard/account">
+          <DropdownMenuContent className="w-64" sideOffset={10}>
+            <DropdownMenuGroup className="p-1">
+              <AdminDropdownItem
+                Icon={UserIcon}
+                href="/dashboard/account"
+                className="rounded-t-sm">
                 Account
               </AdminDropdownItem>
               <AdminDropdownItem
                 Icon={theme === "dark" ? MoonIcon : SunIcon}
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="rounded-t-sm">
                 Toggle Theme
+              </AdminDropdownItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup className="p-1">
+              <AdminDropdownItem
+                Icon={LogOutIcon}
+                variant="destructive"
+                onClick={async () => {
+                  await logout();
+                }}>
+                Log Out
               </AdminDropdownItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -77,36 +96,60 @@ export const Sidebar = ({ user }: SidebarProps) => {
         </Link>
       </footer>
     </nav>
-  )
-}
+  );
+};
 
-interface AdminDropdownItemProps extends DropdownMenuItemProps {
-  Icon: React.FC<React.SVGProps<SVGSVGElement>>
-  children: React.ReactNode
-  href?: string
+const adminDropdownItemVariants = cva(
+  "flex h-9 cursor-pointer items-center justify-start gap-x-3 pl-2",
+  {
+    variants: {
+      variant: {
+        default: "text-foreground hover:bg-primary",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "text-accent hover:text-accent",
+        secondary: "text-secondary hover:text-secondary",
+        ghost: "text-accent hover:text-accent",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+interface AdminDropdownItemProps
+  extends DropdownMenuItemProps,
+    VariantProps<typeof adminDropdownItemVariants> {
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  children?: React.ReactNode;
+  href?: string;
 }
 
 const AdminDropdownItem = ({
   Icon,
   children,
+  className,
   href,
+  variant,
   ...props
 }: AdminDropdownItemProps) => {
   return (
-    <DropdownMenuItem {...props}>
+    <DropdownMenuItem asChild {...props} className="">
       {href ? (
         <Link
           href={href}
-          className="flex h-6 cursor-pointer flex-row items-center justify-start gap-x-2">
-          <Icon className="size-5 text-foreground/70" />
+          className={cn(adminDropdownItemVariants({ variant, className }))}>
+          <Icon className="!size-5 shrink-0 text-foreground" />
           {children}
         </Link>
       ) : (
-        <div className="flex h-6 cursor-pointer flex-row items-center justify-start gap-x-2">
-          <Icon className="size-5 text-foreground/70" />
+        <div className={cn(adminDropdownItemVariants({ variant, className }))}>
+          <Icon className="!size-5 shrink-0 text-foreground" />
           {children}
         </div>
       )}
     </DropdownMenuItem>
-  )
-}
+  );
+};
