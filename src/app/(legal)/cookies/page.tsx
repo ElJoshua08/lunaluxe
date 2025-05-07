@@ -1,9 +1,7 @@
 export default function CookiesPage() {
-    return (
-        <>
-        <div>
-            Cookies page (todo)
-            </div>
-        </>
-    )
+  return (
+    <>
+      <div>Cookies page (todo)</div>
+    </>
+  );
 }

@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { loginWithGoogle } from '@/services/user.service';
 import { ReactNode } from 'react';
 
 interface ContinueButtonProps
@@ -17,7 +18,7 @@ export const ContinueButton = ({
       {...props}
       className="flex items-center justify-start gap-4 h-auto py-2 px-4 w-full text-foreground/85"
       variant="outline"
-      onClick={() => console.log("Trying to signin with google")}
+      onClick={async () => await loginWithGoogle()}
     >
       {icon}
       {label}

@@ -53,7 +53,8 @@ export default function LoginPage() {
           </div>
         </div>
       </section>
-      <section className="flex w-1/2 items-center justify-center bg-primary px-6">
+      <section className="flex w-1/2 items-center justify-center bg-primary px-6 relative overflow-y-clip">
+        <div className="absolute left-0 -rotate-2 top-0 h-[calc(120vh)] -translate-y-12 bg-primary shadow-lg -z-5 -translate-x-1/2 w-16 shadow-primary/50 hidden md:block" />
         <h1 className="text-balance text-center font-italianno text-9xl font-medium text-white">
           Elegance is the only beauty that never fades.
         </h1>

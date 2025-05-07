@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { loginSchema, registerSchema } from '@/lib/schema/auth';
-import { createServerClient } from '@/lib/utils/supabase/server';
+import { createClient, createServerClient } from '@/lib/utils/supabase/server';
 import {
   SignUpWithPasswordCredentials,
   User,
@@ -44,6 +44,20 @@ export async function login(data: z.infer<typeof loginSchema>) {
 
   revalidatePath('/', 'layout');
   redirect('/');
+}
+
+export async function loginWithGoogle() {
+  const supabase = await createClient()
+  const origin = (await headers()).get('origin');
+
+  if (!origin) return
+
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: origin
+    }
+  })
 }
 
 export async function register(data: z.infer<typeof registerSchema>) {
