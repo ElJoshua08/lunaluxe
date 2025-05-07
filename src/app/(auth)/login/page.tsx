@@ -55,7 +55,7 @@ export default function LoginPage() {
         </div>
       </section>
       <section className="flex w-[calc(50%_-_35px)] items-center justify-center bg-primary px-6 relative overflow-y-clip right-0">
-        <div className="absolute left-0 -rotate-2 top-0 h-[calc(120vh)] -translate-y-12 bg-primary shadow-lg -z-5 -translate-x-1/2 w-16 shadow-primary/50 hidden md:block" />
+        <div className="absolute left-0 -rotate-2 top-0 h-[calc(120vh)] -translate-y-12 bg-primary shadow-lg -z-5 -translate-x-1/2 w-16 shadow-primary dark:shadow-primary/50 hidden md:block" />
         <h1 className="text-balance text-center font-italianno text-9xl font-medium text-white">
           Elegance is the only beauty that never fades.
         </h1>

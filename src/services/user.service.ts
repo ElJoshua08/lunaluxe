@@ -19,7 +19,7 @@ export async function getUser(): Promise<{
   user?: User;
   error?: Error;
 }> {
-  const supabase = await createClient();
+  const supabase = await createServerClient();
 
   const { data, error } = await supabase.auth.getUser();
 
@@ -34,16 +34,19 @@ export async function getUser(): Promise<{
   };
 }
 
-export async function login(data: z.infer<typeof loginSchema>) {
-  const supabase = await createServerClient();
+export async function login({ email, password }: z.infer<typeof loginSchema>) {
+  const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
   if (error) {
     return error.message;
   }
 
-  revalidatePath("/", "layout");
+  revalidatePath("/", "page");
   redirect("/");
 }
 
@@ -153,13 +156,13 @@ export async function logout() {
 export async function sendPasswordRecoveryEmail(email: string) {
   const supabase = await createServerClient();
 
-  const { error, data } = await supabase.auth.resetPasswordForEmail(email, {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
   });
 
   if (error) {
-    return { error: error.message};
+    return { error: error.message };
   }
 
-  return {}
+  return {};
 }

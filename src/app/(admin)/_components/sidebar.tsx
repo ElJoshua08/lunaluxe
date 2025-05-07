@@ -5,13 +5,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { logout } from "@/services/user.service";
-import { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
+import {
+  DropdownMenuItem,
+  DropdownMenuItemProps,
+} from "@radix-ui/react-dropdown-menu";
 import { User } from "@supabase/supabase-js";
 import { cva, VariantProps } from "class-variance-authority";
 import {
@@ -37,13 +39,13 @@ export const Sidebar = ({ user }: SidebarProps) => {
       {/* Admin Account */}
       <header className="flex w-full items-center justify-center border-b border-border p-4">
         <DropdownMenu>
-          <DropdownMenuTrigger className="w-full">
+          <DropdownMenuTrigger className="group w-full">
             <div className="flex w-full flex-row items-center justify-start gap-x-4 gap-y-4 rounded-lg bg-foreground/10">
               <div className="flex size-12 shrink-0 items-center justify-center rounded-l-lg bg-foreground/20 font-montserrat text-xl">
                 {user?.user_metadata?.display_name?.[0] ?? "?"}
               </div>
               <p className="inline-block w-full text-start font-montserrat capitalize">
-                {user?.user_metadata?.role ?? "Admin"}
+                {user?.user_metadata?.display_name?.split(" ")[0] ?? "Admin"}
               </p>
               <ChevronsUpDownIcon className="mr-4 size-4 shrink-0 text-foreground/70" />
             </div>
@@ -100,13 +102,13 @@ export const Sidebar = ({ user }: SidebarProps) => {
 };
 
 const adminDropdownItemVariants = cva(
-  "flex h-9 cursor-pointer items-center justify-start gap-x-3 pl-2",
+  "flex h-9 cursor-pointer items-center justify-start gap-x-3 pl-2 rounded-sm ",
   {
     variants: {
       variant: {
-        default: "text-foreground hover:bg-primary",
+        default: "text-foreground hover:bg-accent",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive",
         outline: "text-accent hover:text-accent",
         secondary: "text-secondary hover:text-secondary",
         ghost: "text-accent hover:text-accent",
@@ -141,12 +143,12 @@ const AdminDropdownItem = ({
         <Link
           href={href}
           className={cn(adminDropdownItemVariants({ variant, className }))}>
-          <Icon className="!size-5 shrink-0 text-foreground" />
+          <Icon className="!size-5 shrink-0" />
           {children}
         </Link>
       ) : (
         <div className={cn(adminDropdownItemVariants({ variant, className }))}>
-          <Icon className="!size-5 shrink-0 text-foreground" />
+          <Icon className="!size-5 shrink-0" />
           {children}
         </div>
       )}
