@@ -1,24 +1,27 @@
-"use client"
+"use client";
 
 import {
   Basics,
   BasicsRef,
-} from "@/app/(admin)/dashboard/products/create/_components/basics"
+} from "@/app/(admin)/dashboard/products/create/_components/basics";
 import {
   Customization,
   CustomizationRef,
-} from "@/app/(admin)/dashboard/products/create/_components/customization"
-import { Delivery, DeliveryRef } from "@/app/(admin)/dashboard/products/create/_components/delivery"
-import { Loading } from "@/components/loading"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { useCategories } from "@/hooks/useCategory"
-import { productType } from "@/lib/schema/product"
-import { createProduct } from "@/services/product.service"
-import { motion } from "framer-motion"
-import { Check, ChevronRight } from "lucide-react"
-import { useRef, useState } from "react"
-import { toast } from "sonner"
+} from "@/app/(admin)/dashboard/products/create/_components/customization";
+import {
+  Delivery,
+  DeliveryRef,
+} from "@/app/(admin)/dashboard/products/create/_components/delivery";
+import { Loading } from "@/components/loading";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useCategories } from "@/hooks/useCategory";
+import { productType } from "@/lib/schema/product";
+import { createProduct } from "@/services/product.service";
+import { motion } from "framer-motion";
+import { Check, ChevronRight } from "lucide-react";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 export default function CreateProductPage() {
   // * Here the plan is to make a multi-step form with the following steps:
@@ -26,25 +29,26 @@ export default function CreateProductPage() {
   // *  2. Product visuals: Images, models, multiple colors etc.
   // *  3. Product customization: Colors, Sizes, Custom Texts etc.
   // *  4. Product delivery: Shipping time, production time, etc.
-  const { categories, loading } = useCategories()
+  const { categories, loading } = useCategories();
 
   const formRefs = {
     basics: useRef<BasicsRef>(null),
     customization: useRef<CustomizationRef>(null),
     delivery: useRef<DeliveryRef>(null),
-  }
+  };
 
   const steps = [
-    {
-      label: "Customization",
-      ref: formRefs.customization,
-      component: <Customization ref={formRefs.customization} />,
-    },
     {
       label: "Basics",
       ref: formRefs.basics,
       component: <Basics ref={formRefs.basics} categories={categories} />,
     },
+    {
+      label: "Customization",
+      ref: formRefs.customization,
+      component: <Customization ref={formRefs.customization} />,
+    },
+
     {
       label: "Delivery",
       ref: formRefs.delivery,
@@ -54,31 +58,28 @@ export default function CreateProductPage() {
       label: "Visuals",
       ref: useRef(null),
       component: <h1>Visuals</h1>,
+    },
+  ];
 
-    }
-  ]
+  const [currentStep, setCurrentStep] = useState(0);
+  const [product, setProduct] = useState<Partial<productType>>();
 
-  const [currentStep, setCurrentStep] = useState(0)
-  const [product, setProduct] = useState<Partial<productType>>()
-
-  console.log("Product is", product)
+  console.log("Product is", product);
 
   // * Handle the next step
   async function handleNextStep() {
     // Check if the current step is valid and go to the next step
 
-    const currentRef = steps[currentStep].ref
-    const data = await currentRef.current?.validate()
+    const currentRef = steps[currentStep].ref;
+    const data = await currentRef.current?.validate();
 
     if (data) {
-      console.log("data is, ", data)
-
       setProduct((prev) => ({
         ...prev,
         ...data,
-      }))
+      }));
 
-      setCurrentStep((prev) => prev + 1)
+      setCurrentStep((prev) => prev + 1);
     }
   }
 
@@ -86,22 +87,22 @@ export default function CreateProductPage() {
     if (product === undefined) {
       toast.error(
         "Seems like some data is missing, please check again before submitting."
-      )
-      return
+      );
+      return;
     }
 
-    const { data, error } = await createProduct(product as productType)
+    const { data, error } = await createProduct(product as productType);
 
     if (error) {
-      toast.error(error)
+      toast.error(error);
     }
 
     if (data) {
-      console.log(data)
+      console.log(data);
     }
   }
 
-  if (loading) return <Loading size="fullscreen" />
+  if (loading) return <Loading size="fullscreen" />;
 
   return (
     <main className="flex h-full w-full flex-col items-start justify-start p-8">
@@ -143,9 +144,9 @@ export default function CreateProductPage() {
         <Button
           onClick={async () => {
             if (currentStep + 1 === steps.length) {
-              await handleSubmit()
+              await handleSubmit();
             } else {
-              await handleNextStep()
+              await handleNextStep();
             }
           }}>
           {currentStep + 1 === steps.length ? "Create Product" : "Next Step"}{" "}
@@ -153,5 +154,5 @@ export default function CreateProductPage() {
         </Button>
       </footer>
     </main>
-  )
+  );
 }

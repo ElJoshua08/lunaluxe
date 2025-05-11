@@ -24,7 +24,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -47,9 +46,12 @@ import { useForm } from "react-hook-form";
 
 export type CustomizationRef = {
   validate: () => Promise<productCustomizationType | undefined>;
+  setCategory: (category: string) => void;
 };
 
 export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
+  const [category, setCategory];
+
   const form = useForm<productCustomizationType>({
     resolver: zodResolver(productCustomizationSchema),
     defaultValues: {
@@ -68,11 +70,15 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
       const isValid = await form.trigger();
       return isValid ? form.getValues() : undefined;
     },
+
+    async setCategory(category: string) {
+      setCategory(category);
+      return
+    },
   }));
 
-    const colors = form.watch("colors");
-    const sizes = form.watch("sizes");
-
+  const colors = form.watch("colors");
+  const sizes = form.watch("sizes");
 
   async function handleColorEdit(color: colorType, newColor: colorType) {
     const index = colors.findIndex((c) => c.name === color.name);
@@ -93,7 +99,6 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
     }
     setOpen(false);
   }
-
 
   return (
     <Form {...form}>
@@ -143,7 +148,9 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
                         </DialogTrigger>
                         <EditColor
                           color={color}
-                          onColorEdit={(newColor) => handleColorEdit(color, newColor)}
+                          onColorEdit={(newColor) =>
+                            handleColorEdit(color, newColor)
+                          }
                           onColorDelete={() => handleColorDelete(color)}
                         />
                       </Dialog>
@@ -152,7 +159,10 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
                 </ScrollArea>
               ) : (
                 <div className="flex w-full flex-col items-center justify-center gap-y-4">
-                  <NoPaletteIcon size={256} className="text-primary aniamte-scale-in" />
+                  <NoPaletteIcon
+                    size={256}
+                    className="aniamte-scale-in text-primary"
+                  />
                   <p className="text-2xl text-foreground/75">
                     No colors added yet
                   </p>
@@ -198,21 +208,34 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
             <FormField
               name="sizes"
               control={form.control}
-              render={({}) => (
-                <CardTitle className="inline-flex items-center gap-x-2">
+              render={() => (
+                <CardTitle className="inline-flex items-center gap-x-2 text-xl">
                   Sizes
                   <Separator orientation="vertical" />
-                  <FormMessage className="inline-block" />
+                  <FormDescription className="inline-block text-lg font-normal">
+                    The sizes your product is available in.
+                  </FormDescription>
                 </CardTitle>
               )}
             />
           </CardHeader>
+          <Separator className="mb-2" />
           <CardContent className="flex grow flex-col items-start">
-            <div className="flex h-full grow flex-row flex-wrap gap-4 py-6">
-              {sizes.length > 0 ? (
-                sizes.map((size, index) => <div key={index}>{size}</div>)
+            <div className="flex h-full w-full grow flex-row flex-wrap gap-4 py-6">
+              {colors.length > 0 ? (
+                <ScrollArea className="w-full">
+                  <div className="flex h-full flex-col items-center justify-start gap-y-4"></div>
+                </ScrollArea>
               ) : (
-                <p className="text-sm text-foreground/50">No sizes added yet</p>
+                <div className="flex w-full flex-col items-center justify-center gap-y-4">
+                  <NoPaletteIcon
+                    size={256}
+                    className="aniamte-scale-in text-primary"
+                  />
+                  <p className="text-2xl text-foreground/75">
+                    No sizes added yet
+                  </p>
+                </div>
               )}
             </div>
 
@@ -223,10 +246,10 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
                 <FormItem className="flex w-full flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">
-                      Use Sizes in Model
+                      Use Colors in Model
                     </FormLabel>
                     <FormDescription>
-                      Change the size of the model (if provided)
+                      Change the color of the model (if provided)
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -239,7 +262,14 @@ export const Customization = forwardRef<CustomizationRef>(({}, ref) => {
               )}
             />
           </CardContent>
-          <CardFooter className="flex w-full items-center justify-end"></CardFooter>
+          <CardFooter className="flex w-full items-center justify-end">
+            <AddColor
+              className="w-full"
+              onColorAdd={(color) =>
+                form.setValue("colors", [...colors, color])
+              }
+            />
+          </CardFooter>
         </Card>
       </div>
     </Form>
